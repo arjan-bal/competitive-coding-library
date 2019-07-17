@@ -1,3 +1,5 @@
+//attribution: Jatin Yadav on codechef
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -100,8 +102,7 @@ void mul_big_mod(vll &a, vll & b, ll mod){
     }
 }
 
-const int N = 2e5 + 10, mod = 1e9 + 7;
-int fact[N], invfact[N];
+const mod = 1e9 + 7;
 inline int add(int x, int y){ x += y; if(x >= mod) x -= mod; return x;}
 inline int sub(int x, int y){ x -= y; if(x < 0) x += mod; return x;}
 inline int mul(int x, int y){ return (((ll) x) * y) % mod;}
@@ -115,37 +116,7 @@ inline int powr(int a, ll b){
     return x;
 }
 inline int inv(int a){ return powr(a, mod - 2);}
-void pre(){
-    fact[0] = invfact[0] = 1;
-    for(int i = 1;i < N; i++) fact[i] = mul(i, fact[i - 1]);
-    invfact[N - 1] = inv(fact[N - 1]);
-    for(int i = N - 2; i >= 1; i--) invfact[i] = mul(invfact[i + 1], i + 1);
-    assert(invfact[1] == 1);
-}
-inline int C(int n, int k){
-    if(n < k || k < 0) return 0;
-    return mul(fact[n], mul(invfact[k], invfact[n - k]));
-}
-
-int stirling(int n, int k){
-    if(k > n) return 0;
-    vll poly1(n + 1), poly2(n + 1);
-    for(int j = 0; j <= n; j++){
-        poly1[j] = mul(powr(j, n), invfact[j]);
-        poly2[j] = invfact[j];
-        if(j & 1) poly2[j] = sub(0, poly2[j]);
-    }
-    mul_big_mod(poly1, poly2, mod);
-    return poly1[k];
-}
 
 int main(){
-    pre();
     precompute_powers();
-
-    int n, k;
-    scanf("%d %d", &n, &k);
-    int W = 0, w;
-    for(int i = 1; i <= n; i++) scanf("%d", &w), W = add(W, w);
-    printf("%d\n", mul(W, add(stirling(n, k), mul(n - 1, stirling(n - 1, k)))));
 }

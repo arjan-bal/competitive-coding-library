@@ -33,9 +33,7 @@ int discreteLog(int a, int b, int mod)
 	cur=1;
 
 	for(int p=0; p<=middle; ++p){
-		if(rem.count(cur)){
-			return p*middle+rem[cur];
-		}		
+		if(rem.count(cur)) return p*middle+rem[cur];
 		cur=1LL*cur*po%mod;
 	}
 

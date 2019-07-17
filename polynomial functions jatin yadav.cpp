@@ -1,5 +1,3 @@
-//super-fast ntt taken from tourist
-
 const int mod = 663224321;
  
 inline void add(int &a, int b) {
@@ -10,6 +8,7 @@ inline void sub(int &a, int b) {
     a -= b;
     if (a < 0) a += mod;
 }
+
 inline int mul(int a, int b) {
 #if !defined(_WIN32) || defined(_WIN64)
     return (int) ((long long) a * b % mod);
@@ -49,115 +48,124 @@ inline int inv(int a) {
     if (u < 0) u += mod;
     return u;
 }
-namespace ntt {
-    int base = 1;
-    vector<int> roots = {0, 1};
-    vector<int> rev = {0, 1};
-    int max_base = -1;
-    int root = -1;
-    void init() {
-        int tmp = mod - 1;
-        max_base = 0;
-        while (tmp % 2 == 0) {
-            tmp /= 2;
-            max_base++;
-        }
-        root = 2;
-        while (true) {
-            if (power(root, 1 << max_base) == 1) {
-                if (power(root, 1 << (max_base - 1)) != 1) {
-                  break;
-                }
-            }
-            root++;
-        }
-    }
-    void ensure_base(int nbase) {
-        if (max_base == -1) {
-            init();
-        }
-        if (nbase <= base) {
-            return;
-        }
-        assert(nbase <= max_base);
-        rev.resize(1 << nbase);
-        for (int i = 0; i < (1 << nbase); i++) {
-            rev[i] = (rev[i >> 1] >> 1) + ((i & 1) << (nbase - 1));
-        }
-        roots.resize(1 << nbase);
-        while (base < nbase) {
-            int z = power(root, 1 << (max_base - 1 - base));
-            for (int i = 1 << (base - 1); i < (1 << base); i++) {
-                roots[i << 1] = roots[i];
-                roots[(i << 1) + 1] = mul(roots[i], z);
-            }
-            base++;
-        }
-    }
-    void fft(vector<int> &a) {
-        int n = (int) a.size();
-        assert((n & (n - 1)) == 0);
-        int zeros = __builtin_ctz(n);
-        ensure_base(zeros);
-        int shift = base - zeros;
-        for (int i = 0; i < n; i++) {
-            if (i < (rev[i] >> shift)) {
-                swap(a[i], a[rev[i] >> shift]);
-            }
-        }
-        for (int k = 1; k < n; k <<= 1) {
-            for (int i = 0; i < n; i += 2 * k) {
-                for (int j = 0; j < k; j++) {
-                    int x = a[i + j];
-                    int y = mul(a[i + j + k], roots[j + k]);
-                    a[i + j] = x + y - mod;
-                    if (a[i + j] < 0) a[i + j] += mod;
-                    a[i + j + k] = x - y + mod;
-                    if (a[i + j + k] >= mod) a[i + j + k] -= mod;
-                }
-            }
-        }
-    }
-    vector<int> multiply(vector<int> a, vector<int> b, int eq = 0) {
-        int need = (int) (a.size() + b.size() - 1);
-        int nbase = 0;
-        while ((1 << nbase) < need) nbase++;
-        ensure_base(nbase);
-        int sz = 1 << nbase;
-        a.resize(sz);
-        b.resize(sz);
-        fft(a);
-        if (eq) b = a; else fft(b);
-        int inv_sz = inv(sz);
-        for (int i = 0; i < sz; i++) {
-            a[i] = mul(mul(a[i], b[i]), inv_sz);
-        }
-        reverse(a.begin() + 1, a.end());
-        fft(a);
-        a.resize(need);
-        return a;
-    }
-    vector<int> square(vector<int> a) {
-        return multiply(a, a, 1);
+
+#define ld float
+#define vll vector<ll>
+
+struct base{
+    ld x,y;
+    base(){x=y=0;}
+    base(ld _x, ld _y){x = _x,y = _y;}
+    base(ld _x){x = _x, y = 0;}
+    void operator = (ld _x){x = _x,y = 0;}
+    ld real(){return x;}
+    ld imag(){return y;}
+    base operator + (const base& b){return base(x+b.x,y+b.y);}
+    void operator += (const base& b){x+=b.x,y+=b.y;}
+    base operator * (const base& b){return base(x*b.x - y*b.y,x*b.y+y*b.x);}
+    void operator *= (const base& b){ld p = x*b.x - y*b.y, q = x*b.y+y*b.x; x = p, y = q;}
+    void operator /= (ld k){x/=k,y/=k;}
+    base operator - (const base& b){return base(x - b.x,y - b.y);}
+    void operator -= (const base& b){x -= b.x, y -= b.y;}
+    base conj(){ return base(x, -y);}
+    base operator / (ld k) { return base(x / k, y / k);}
+    void Print(){ cerr << x <<  " + " << y << "i\n";}
+};
+double PI = 2.0*acos(0.0);
+const int MAXN = 19;
+const int maxn = (1<<MAXN);
+base W[maxn],invW[maxn], P1[maxn], Q1[maxn];
+void precompute_powers(){
+    for(int i = 0;i<maxn/2;i++){
+        double ang = (2*PI*i)/maxn; 
+        ld _cos = cos(ang), _sin = sin(ang);
+        W[i] = base(_cos,_sin);
+        invW[i] = base(_cos,-_sin);
     }
 }
+void fft (vector<base> & a, bool invert) {
+    int n = (int) a.size();
+ 
+    for (int i=1, j=0; i<n; ++i) {
+        int bit = n >> 1;
+        for (; j>=bit; bit>>=1)
+            j -= bit;
+        j += bit;
+        if (i < j)
+            swap (a[i], a[j]);
+    }
+    for (int len=2; len<=n; len<<=1) {
+        for (int i=0; i<n; i+=len) {
+            int ind = 0,add = maxn/len;
+            for (int j=0; j<len/2; ++j) {
+                base u = a[i+j],  v = (a[i+j+len/2] * (invert?invW[ind]:W[ind]));
+                a[i+j] = (u + v);
+                a[i+j+len/2] = (u - v);
+                ind += add;
+            }
+        }
+    }
+    if (invert) for (int i=0; i<n; ++i) a[i] /= n;
+}
+
+// 4 FFTs in total for a precise convolution
+void mul_big_mod(vll &a, vll & b, ll mod){
+    int n1 = a.size(),n2 = b.size();
+    int final_size = a.size() + b.size() - 1;
+    int n = 1;
+    while(n < final_size) n <<= 1;
+    vector<base> P(n), Q(n);
+    int SQRTMOD = (int)sqrt(mod) + 10;
+    for(int i = 0;i < n1;i++) P[i] = base(a[i] % SQRTMOD, a[i] / SQRTMOD);
+    for(int i = 0;i < n2;i++) Q[i] = base(b[i] % SQRTMOD, b[i] / SQRTMOD);
+    fft(P, 0);
+    fft(Q, 0);
+    base A1, A2, B1, B2, X, Y;
+    for(int i = 0; i < n; i++){
+        X = P[i];
+        Y = P[(n - i) % n].conj();
+        A1 = (X + Y) * base(0.5, 0);
+        A2 = (X - Y) * base(0, -0.5);
+        X = Q[i];
+        Y = Q[(n - i) % n].conj();
+        B1 = (X + Y) * base(0.5, 0);
+        B2 = (X - Y) * base(0, -0.5);
+        P1[i] = A1 * B1 + A2 * B2 * base(0, 1);
+        Q1[i] = A1 * B2 + A2 * B1;
+    }
+    for(int i = 0; i < n; i++) P[i] = P1[i], Q[i] = Q1[i];
+    fft(P, 1);
+    fft(Q, 1);
+    a.resize(final_size);
+    for(int i = 0; i < final_size; i++){
+        ll x = (ll)(P[i].real() + 0.5);
+        ll y = (ll)(P[i].imag() + 0.5) % mod;
+        ll z = (ll)(Q[i].real() + 0.5);
+        a[i] = (x + ((y * SQRTMOD + z) % mod) * SQRTMOD) % mod;
+    }
+}
+//use your favourate fast polynomial multiplication algo here
 vi mult(vi a,vi b, int upper_limit = 1e9) {
 	vi c;
-    if (min(a.size(),b.size()) <= 5) {
-        int sz1 = a.size();
-        int sz2 = b.size();
-        c.resize(sz1 + sz2 - 1);
+    int sz1 = a.size();
+    int sz2 = b.size();
+    if(min(sz1, sz2)<=5){
+    	c.resize(sz1 + sz2 - 1);
         for (int i = 0;i < sz1;++i)
             for (int j = 0;j < sz2;++j)
                 add(c[i + j],mul(a[i],b[j]));
-    } else
-        c = ntt::multiply(a,b);
+    }
+    else{
+    	vll a1(a.begin(), a.end()), b1(b.begin(), b.end());
+    	mul_big_mod(a1, b1, mod);
+    	c=vi(a1.begin(), a1.end());
+    }
     if(c.size() > upper_limit) c.resize(upper_limit);
     return c;
 }
 
 //attribution: https://www.codechef.com/viewsolution/19110694
-namespace fft{
+namespace poly_ops{
 	inline int add(int x, int y){ x += y; if(x >= mod) x -= mod; return x;}
 	inline int sub(int x, int y){ x -= y; if(x < 0) x += mod; return x;}
 
