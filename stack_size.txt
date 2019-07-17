@@ -1,0 +1,3 @@
+On Linux, to get an unlimited stack, you should open a shell and run this command:
+$ ulimit -s unlimited
+And then (until you close that shell) the stack limit for that shell (and for the commands you will call from inside that shell, like ./program < input.txt and so on) will be unlimited.
