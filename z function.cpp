@@ -1,3 +1,4 @@
+//attribution: cp-algorithms.com
 vector<int> z_function(string s) 
 {
     int n=(int) s.size();
