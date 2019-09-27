@@ -25,7 +25,7 @@ inline void update(int st, int en, int node, int idx, int nv)
 	int mid=((st+en)>>1);
 	update(st, mid, (node<<1), idx, nv);
 	update(mid+1, en, ((node<<1)|1), idx, nv);
-	tree[node]=unite(tree[node<<1], tree[((node<<1)|1)]);
+	tree[node]=unite(tree[node<<1], tree[(node<<1)|1]);
 }
 
 inline int query(int st, int en, int node, int l, int r)
@@ -42,7 +42,8 @@ inline void push(int st, int en, int node)
 {
 	tree[node]+=lazy[node];
 	if(st!=en){
-
+		lazy[node<<1]+=lazy[node];
+		lazy[(node<<1)|1]+=lazy[node];
 	}
 	lazy[node]=0;
 	return ;
@@ -60,7 +61,7 @@ inline void update(int st, int en, int node, int l, int r, int nv)
 	int mid=((st+en)>>1);
 	update(st, mid, (node<<1), l, r, nv);
 	update(mid+1, en, ((node<<1)|1), l, r, nv);
-	tree[node]=unite(tree[node<<1], tree[((node<<1)|1)]);
+	tree[node]=unite(tree[node<<1], tree[(node<<1)|1]);
 }
 
 inline int query(int st, int en, int node, int l, int r)

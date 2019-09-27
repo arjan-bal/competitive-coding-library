@@ -20,7 +20,7 @@ ll inv(ll a, ll b)
 	return (y1+b)%b;
 }
 
-int combine(vi num, vi rem)
+ll combine(vector<int> &num, vector<int> &rem)
 {
 
     ll prod=1;

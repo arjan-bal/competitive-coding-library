@@ -1,7 +1,7 @@
 bool blocked[N]={};
 int subtree[N], maxtree[N];
 
-inline void solveTree(int cen, int compSize)
+inline void solveTree(int cen)
 {
 	
 	return ;
@@ -34,7 +34,7 @@ inline void go(int entry)
 
 	//prn(cen);
 
-	solveTree(cen, n1);
+	solveTree(cen);
 	blocked[cen]=1;
 
 	for(auto i:adj[cen]){
