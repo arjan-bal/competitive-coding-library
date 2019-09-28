@@ -14,12 +14,24 @@ using namespace std;
 template <typename Arg1>
 void __f(Arg1&& arg1)
 {
-    cout << arg1 << "\n";
+    cout<<arg1<<"\n";
 }
 template <typename Arg1, typename... Args>
 void __f(Arg1&& arg1, Args&&... args)
 {
-    cout << arg1<<" ";__f(args...);
+    cout<<arg1<<" "; __f(args...);
+}
+
+#define read(...) __g(__VA_ARGS__)
+template <typename Arg1>
+void __g(Arg1&& arg1)
+{
+    cin>>arg1 ;
+}
+template <typename Arg1, typename... Args>
+void __g(Arg1&& arg1, Args&&... args)
+{
+    cin>>arg1; __g(args...);
 }
 
 #define ll                      long long
