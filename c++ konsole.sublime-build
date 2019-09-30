@@ -1,5 +1,5 @@
 {
-    "shell_cmd": "g++ -std=c++11 -Wall \"${file}\" -o \"${file_path}/${file_base_name}\" && konsole --hold -e \"${file_path}/./${file_base_name}\"",
+    "shell_cmd": "g++ -std=c++11 -D LOCAL -Wall \"${file}\" -o \"${file_path}/${file_base_name}\" && konsole --hold -e \"${file_path}/./${file_base_name}\"",
     "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
     "shell": true,
     "working_dir": "${file_path}",
