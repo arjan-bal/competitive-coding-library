@@ -10,28 +10,26 @@ Author: Arjan Singh Bal, IIITM Gwalior
 
 using namespace std;
 
-#define prn(...) __f(__VA_ARGS__)
 template <typename Arg1>
-void __f(Arg1&& arg1)
+void prn(Arg1&& arg1)
 {
     cout<<arg1<<"\n";
 }
 template <typename Arg1, typename... Args>
-void __f(Arg1&& arg1, Args&&... args)
+void prn(Arg1&& arg1, Args&&... args)
 {
-    cout<<arg1<<" "; __f(args...);
+    cout<<arg1<<" "; prn(args...);
 }
 
-#define read(...) __g(__VA_ARGS__)
 template <typename Arg1>
-void __g(Arg1&& arg1)
+void read(Arg1&& arg1)
 {
     cin>>arg1 ;
 }
 template <typename Arg1, typename... Args>
-void __g(Arg1&& arg1, Args&&... args)
+void read(Arg1&& arg1, Args&&... args)
 {
-    cin>>arg1; __g(args...);
+    cin>>arg1; read(args...);
 }
 
 #define ll                      long long
