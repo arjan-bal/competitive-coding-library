@@ -10,7 +10,7 @@ void compute(int l, int r, int optl, int optr)
     if(l > r) return;
     int mid = (l + r) >> 1;
     ll &best = dp[act][mid], cur;
-    best = inf;
+    best = -inf;
     int opt = -1;
 
     for(int k = optl; k <= min(mid, optr); ++k) {
