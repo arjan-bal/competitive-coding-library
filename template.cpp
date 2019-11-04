@@ -62,10 +62,14 @@ void read(Arg1&& arg1, Args&&... args)
 
 int main()
 {
-	//freopen("in.txt" , "r" , stdin) ;
-	//freopen("out.txt" , "w" , stdout) ;
+	#ifdef LOCAL
+	//freopen("in.txt" , "r" , stdin);
+	//freopen("out.txt" , "w" , stdout);
+	#else	
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
+	#endif
+	
 	
 	return 0;
 }

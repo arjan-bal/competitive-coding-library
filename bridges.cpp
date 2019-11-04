@@ -10,8 +10,10 @@ void dfs(int cur)
 		parent[i.ff]=cur;
 		dfs(i.ff);
 		if(low[i.ff]<=low[cur]) low[cur]=low[i.ff];
-		else isbrg[i.ss]=1, ++cnt;
+		else if(low[i.ff]>disc[cur]) isbrg[i.ss]=1;
 	}
 	return ;
 }
+
+//take ctr>=1
  
