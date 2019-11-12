@@ -1,5 +1,5 @@
 struct node{
-	node *l, *r;
+	node *l=0, *r=0;
 	int val=0;
 };
 
@@ -50,7 +50,7 @@ inline int query(int st, int en, pnode cur, int l, int r)
 //lazy propogation
 
 struct node{
-	node *l, *r;
+	node *l=0, *r=0;
 	int val=0, lazy=0;
 };
 
