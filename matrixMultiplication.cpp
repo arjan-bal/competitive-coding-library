@@ -28,9 +28,9 @@ void power(matrix &res, ll ex)
 	matrix M=res;
 	--ex;
 	while(ex>0){
-		if(ex&1) multiply(res, M);
-		multiply(M, M);
+		if(ex&1) res=multiply(res, M);
+		M=multiply(M, M);
 		ex>>=1;
 	}
-	return ;
+	return res;
 }
