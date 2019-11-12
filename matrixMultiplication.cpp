@@ -12,7 +12,7 @@ matrix multiply(matrix &mat1, matrix &mat2)
 	assert(m1==n2);
 	ll sum;
 	matrix ret;
-	reshape(ret, a, d);
+	reshape(ret, n1, m2);
 
 	for(int i=0; i<n1; ++i)
 	    for(int j=0; j<m2; ++j){	
