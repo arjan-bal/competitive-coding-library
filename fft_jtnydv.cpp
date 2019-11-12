@@ -1,9 +1,7 @@
 //attribution: Jatin Yadav on codechef
 namespace fft{
-    #define ll long long
     #define ld float
-    #define vi vector<int>
-    #define vll vector<ll>
+    #define poly vector<ll>
 
     struct base{
         ld x,y;
@@ -62,7 +60,7 @@ namespace fft{
     }
 
     // 4 FFTs in total for a precise convolution
-    void mul_big_mod(vll &a, vll &b, ll mod){
+    poly mul_big_mod(poly &a, poly &b, ll mod){
         int n1 = a.size(),n2 = b.size();
         int final_size = a.size() + b.size() - 1;
         int n = 1;
@@ -89,13 +87,14 @@ namespace fft{
         for(int i = 0; i < n; i++) P[i] = P1[i], Q[i] = Q1[i];
         fft(P, 1);
         fft(Q, 1);
-        a.resize(final_size);
+        poly ret(final_size);
         for(int i = 0; i < final_size; i++){
             ll x = (ll)(P[i].real() + 0.5);
             ll y = (ll)(P[i].imag() + 0.5) % mod;
             ll z = (ll)(Q[i].real() + 0.5);
-            a[i] = (x + ((y * SQRTMOD + z) % mod) * SQRTMOD) % mod;
+            ret[i] = (x + ((y * SQRTMOD + z) % mod) * SQRTMOD) % mod;
         }
+        return ret;
     }
 }
 

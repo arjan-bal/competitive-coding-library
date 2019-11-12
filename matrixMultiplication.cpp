@@ -1,17 +1,26 @@
 typedef vector<vector<ll>> matrix; 
 
-void multiply(matrix &mat1, matrix &mat2)
+void reshape(matrix &mat, int n, int m)
 {
-	int n=mat1.size();
-	ll mul[n][n], sum;
-	for(int i=0; i<n; ++i)
-	    for(int j=0; j<n; ++j){	
+	mat.resize(n);
+	for(auto &i:mat) i.resize(m);
+}
+
+matrix multiply(matrix &mat1, matrix &mat2)
+{
+	int n1=mat1.size(), m1=mat1[0].size(), n2=mat2.size(), m2=mat2[0].size();
+	assert(m1==n2);
+	ll sum;
+	matrix ret;
+	reshape(ret, a, d);
+
+	for(int i=0; i<n1; ++i)
+	    for(int j=0; j<m2; ++j){	
 	    	sum=0;
-	        for(int l=0; l<n; ++l) sum=(sum+mat1[i][l]*mat2[l][j])%mod;
-	        mul[i][j]=sum;
+	        for(int l=0; l<m1; ++l) sum=(sum+mat1[i][l]*mat2[l][j])%mod;
+	        ret[i][j]=sum;
 	    }
-	for(int i=0; i<n; ++i) 
-		for(int j=0; j<n; ++j) mat1[i][j]=mul[i][j];
+	return ret;
 }
 
 void power(matrix &res, ll ex)
