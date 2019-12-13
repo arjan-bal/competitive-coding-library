@@ -11,7 +11,7 @@ void init()
     b.resize(m+1, -1);
 }
 
-bool match(int idx)
+bool match(int idx)N
 {
     for(auto i:adj[idx]){
         if(seen[i] || i==a[idx]) continue;

@@ -23,7 +23,6 @@ ll inv(ll a, ll m)
 
 ll combine(vector<int> &num, vector<int> &rem)
 {
-
     ll prod=1;
     for(auto i:num) prod*=i;   
     int n=rem.size();

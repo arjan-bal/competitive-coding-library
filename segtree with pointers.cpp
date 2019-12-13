@@ -35,16 +35,15 @@ inline void update(int st, int en, pnode &cur, int idx, int nv)
 	int mid=((st+en)>>1);
 	if(idx<=mid) update(st, mid, cur->l, idx, nv);
 	else update(mid+1, en, cur->r, idx, nv);
-	cur.val=valf(cur->l)+valf(cur->r);
+	cur->val=valf(cur->l)+valf(cur->r);
 }
 
 inline int query(int st, int en, pnode cur, int l, int r)
 {
-	if(st>r || en<l) return 0;
-	if(!cur) return 0;
+	if(st>r || en<l || !cur) return 0;
 	if(st>=l && en<=r) return cur->val;
 	int mid=((st+en)>>1);
-	return query(st, mid, node->l, l, r)+query(mid+1, en, cur->r, l, r);
+	return query(st, mid, cur->l, l, r)+query(mid+1, en, cur->r, l, r);
 }
 
 //lazy propogation

@@ -4,7 +4,7 @@ bool act=0;		//keep toggling active
 long long C(int i, int j);	//define cost function, proof usually involves this
 long long dp[2][N];
 
-// compute dp_cur[l], ... dp_cur[r] (inclusive)
+// compute dp[act][l], ... dp[act][r] (inclusive)
 void compute(int l, int r, int optl, int optr)
 {
     if(l > r) return;
