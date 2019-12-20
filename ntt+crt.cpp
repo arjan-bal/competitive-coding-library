@@ -1,3 +1,4 @@
+//credit kevinsogo on hackerrank
 const ll mod = 100003;
 
 const ll mod0 = 1484783617;

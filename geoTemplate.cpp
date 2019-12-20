@@ -1,136 +1,88 @@
-double pi=2.*acos(0);
-
-double radian(double dgre){ return (pi*dgre)/180.; }
-
-double degree(double rad){ return (180*rad)/pi; }
-
-struct vktr{
-    double x, y, z;
-    vktr(double x=0, double y=0, double z=0):x(x), y(y), z(z){}
-    void prn(void){ cout<<x<<"i + "<<y<<"j + "<<z<<"k\n"; }
+#define base double
+struct pt{
+	base x, y;
 };
 
-double norm(vktr v){ return sqrtl(v.x*v.x+v.y*v.y+v.z*v.z); }
+const double pi=2.*acos(0);
 
-double norm2(vktr v){ return v.x*v.x+v.y*v.y+v.z*v.z; }
+double radian(double dgre){ return (pi*dgre)/180.;}
+double degree(double rad){ return (180*rad)/pi;}
+base dist2(pt p){ return p.x*p.x + p.y*p.y;}
+double dist(pt p){ return sqrtl(dist2(p));}
+pt operator-(pt p1, pt p2){return {p1.x-p2.x, p1.y-p2.y};}
+pt operator+(pt p1, pt p2){return {p1.x+p2.x, p1.y+p2.y};}
+pt operator*(pt p, base d){return {p.x*d, p.y*d};}
+pt operator*(base d, pt p){return {p.x*d, p.y*d};}
+pt operator/(pt p, base d){return {p.x/d, p.y/d};}
+pt operator/(base d, pt p){return {p.x/d, p.y/d};}
+base cross(pt p1, pt p2){return p1.x*p2.y - p1.y*p2.x;}
 
-typedef vktr point;
-
-struct line{
-    point p1, p2;
-    double a, b, c;     //ax+by=c
-    line(point p1, point p2):p1(p1), p2(p2)
-    {a=p2.y-p1.y; b=p1.x-p2.x; c=a*p1.x+b*p1.y; }
-    line(double a, double b, double c):a(a), b(b), c(c)
-    {
-        if(a==0){
-            p1=point(1, c/b);
-            p2=point(2, c/b);
-            return ;
-        }
-        if(b==0){
-            p1=point(c/a, 1);
-            p2=point(c/a, 2);
-            return ;
-        }
-        p1=point(1, (c-b)/a);
-        p2=point(2, (c-2.*b)/a);
-        return ;
-    }
-
-};
-
-
-vktr operator-(vktr v1, vktr v2){ return vktr(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z); }
-
-vktr operator+(vktr v1, vktr v2){ return vktr(v1.x+v2.x, v1.y+v2.y, v1.z+v2.z); }
-
-double operator|(vktr v1, vktr v2){ return v1.x*v2.x+v1.y*v2.y+v1.z*v2.z; }
-
-vktr operator*(vktr v1, vktr v2)
+bool isParallel(pt a, pt b, pt c, pt d)
 {
-    double x=v1.y*v2.z-v1.z*v2.y,
-    y=v1.z*v2.x-v1.x*v2.z,
-    z=v1.x*v2.y-v1.y*v2.x;
-    return vktr(x, y, z);
+	return (cross(b-a, d-c)==0);
 }
 
-vktr operator*(vktr v, double d){ return vktr(d*v.x, d*v.y, d*v.z); }
-
-vktr operator*(double d, vktr v){ return vktr(d*v.x, d*v.y, d*v.z); }
-
-bool operator==(vktr v1, vktr v2)
+bool isColinear(pt a, pt b, pt c)
 {
-	if(v1.x==v2.x && v1.y==v2.y && v1.z==v2.z) return 1;
-	return 0;
+	return (cross(a-b, a-c)==0);
 }
 
-bool operator!=(vktr v1, vktr v2){ return !(v1==v2); }
-
-bool liescollinear(point P, point Q, point R){		//2D 
-    if(P.x==Q.x){ //vertical segment
-        if(min(P.y, Q.y)<=R.y && max(P.y, Q.y)>=R.y) return true;
-        else return false;
-    }
-    else{
-        if(min(P.x, Q.x)<=R.x && max(P.x, Q.x)>=R.x) return true;
-        else return false;
-    }
-}
-
-bool isParallel(line l1, line l2)
+bool isColinear(pt a, pt b, pt c, pt d)
 {
-	return l1.a*l2.b-l2.a*l1.b==0;
+	return (isColinear(a, b, c) && isColinear(a, b, d));
 }
 
-point line2lineIntersect(line l1, line l2)
+bool isLeft(pt p1, pt p2, pt p3)
+{ 
+	return (cross(p1-p2, p3-p2)<0);
+}
+
+bool oppositeSides(pt a, pt b, pt c, pt d)
 {
-	double det=l1.a*l2.b-l2.a*l1.b;
-	return point( (l2.b*l1.c-l1.b*l2.c)/det, (l1.a*l2.c-l2.a*l1.c)/det );
+    return (isLeft(a, b, c)!=isLeft(a, b, d));
 }
 
-bool lies(point P, point Q, point R){		//lies on line segment
- if( (Q - P)*(R - P) != vktr(0, 0, 0) ) return false;
- else return liescollinear(P, Q, R);
-}
-
-double distPointLine(line l1, point p){ return norm((l1.p2-l1.p1)*(p-l1.p1))/norm(l1.p2-l1.p1); }
-
-
-vktr rotateCWx(vktr v, double theta)     //around x axis
-{ return vktr(v.x, v.y*cos(theta)-v.z*sin(theta), v.y*sin(theta)+v.z*cos(theta)); }
-
-vktr rotateCWy(vktr v, double theta)     //around y axis
-{ return vktr(v.z*sin(theta)+v.x*cos(theta), v.y, v.z*cos(theta)-v.x*sin(theta)); }
-
-vktr rotateCWz(vktr v, double theta)     //around z axis
-{ return vktr(v.x*cos(theta)-v.y*sin(theta), v.x*sin(theta)+v.y*cos(theta), v.z); }
-
-double cross2D(vktr v1, vktr v2)  		//value retuned is only z component as x & y=0 in cross prod
-{ return v1.x*v2.y - v1.y*v2.x; }
-
-bool isCW(point p1, point p2, point p3)		//2D
-{ return cross2D(p1-p2, p3-p2)>0; }
-
-bool coolinear(point p1, point p2, point p3)
-{ return cross2D(p1-p2, p3-p2)==0; }
-
-bool isConvex(const vector<point> &vertices)
+bool isBetween(pt a, pt b, pt c)
 {
-	int n=vertices.size();
-	bool first=isCW(vertices[0], vertices[1], vertices[3]);
-	for(int i=1; i<n; ++i){
-		if(isCW(vertices[i], vertices[(i+1)%n], vertices[(i+2)%n]) != first) return 0;
+    return (min(a.x, b.x)<=c.x && c.x<=max(a.x, b.x) && min(a.y, b.y)<=c.y && c.y<=max(a.y,b.y));
+}
+
+//1:intersects at 1 pt, 0:doesn't intersect, -1:intersects at oo points
+int lineIntersection(pt a, pt b, pt c, pt d, pt &res)
+{
+	if(!isParallel(a, b, c, d)){
+		res=c-(d-c)*cross(b-a, c-a)/cross(b-a, d-c);
+		return 1;
 	}
+	return -isColinear(a, b, c, d);
+}
+
+bool segmentIntersect(pt a, pt b, pt c, pt d)
+{
+    if(isCollinear(a, b, c) && isBetween(a, b, c)) return 1;
+    if(isCollinear(a, b, d) && isBetween(a, b, d)) return 1;
+    if(isCollinear(c, d, a) && isBetween(c, d, a)) return 1;
+    if(isCollinear(c, d, b) && isBetween(c, d, b)) return 1;
+    return (oppositeSides(a, b, c, d) && oppositeSides(c, d, a, b));
+}
+
+bool isConvex(vector<pt> &vertices)
+{
+	bool first=isLeft(vertices[0], vertices[1], vertices[3]);
+	for(int i=1; i<vertices.size(); ++i)
+		if(isLeft(vertices[i], vertices[(i+1)%n], vertices[(i+2)%n]) != first) return 0;
 	return 1;
 }
 
-double polygonArea(const vector<point> &vertices)
+double polygonArea(vector<pt> &vertices)
 {
-	int n=vertices.size();
 	double ans=0;
-	for(int i=1; i+1<n; ++i){
-		ans+=cross2D(vertices[i]-vertices[0], vertices[i+1]-vertices[0]);
-	}
+	for(int i=1; i+1<vertices.size(); ++i)
+		ans+=cross(vertices[i]-vertices[0], vertices[i+1]-vertices[0]);
 	return abs(ans/2.0);
 }
+
+//for 3D
+pt rotateCWx(pt v, double theta){return {v.x, v.y*cos(theta)-v.z*sin(theta), v.y*sin(theta)+v.z*cos(theta)};}
+pt rotateCWy(pt v, double theta){return {v.z*sin(theta)+v.x*cos(theta), v.y, v.z*cos(theta)-v.x*sin(theta)};}
+pt rotateCWz(pt v, double theta){return {v.x*cos(theta)-v.y*sin(theta), v.x*sin(theta)+v.y*cos(theta), v.z};}
