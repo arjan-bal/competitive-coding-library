@@ -2,7 +2,7 @@ ll power(ll x, ll y, ll m)
 {
     if (y==0)    return 1;
     ll p=power(x, y/2, m)%m;
-    p=(p*p)%m; 
+    p=p*p%m; 
     return (y%2==0)?p:(x*p)%m;
 }
 
@@ -21,18 +21,18 @@ int discreteLog(int a, int b, int mod)
 	rem.reserve(middle);
 	rem.max_load_factor(.25);
 
-	int inv=modInverse(a, mod);
-	int cur=1;
+	ll inv=modInverse(a, mod);
+	ll cur=1;
 
 	for(int r=0; r<middle; ++r){
-		rem[1LL*cur*b%mod]=r;
-		cur=1LL*cur*inv%mod;
+		rem[cur*b%mod]=r;
+		cur=cur*inv%mod;
 	}
 
 	int po=power(a, middle, mod);
 	cur=1;
 
-	for(int p=0; p<=middle; ++p){
+	for(int p=0; p<=middle+1; ++p){
 		if(rem.count(cur)) return p*middle+rem[cur];
 		cur=1LL*cur*po%mod;
 	}
