@@ -19,7 +19,7 @@ void update(pnode t)
 	t->size = sz(t->l)+1+sz(t->r);
 }
 
-void split(pnode t,pnode &l,pnode &r,int key){
+void split(pnode t,pnode &l,pnode &r, int key){
     if(!t) l=r=0;
     else if(t->val<=key) split(t->r,t->r,r,key), l=t;
     else split(t->l,l,t->l,key), r=t;    
@@ -62,7 +62,7 @@ void erase(pnode &t, int val)
 	update(t);
 }
 
-bool find(pnode &t, int &val)
+bool find(pnode &t, int val)
 {
 	if(!t) return 0;
 	if(val<t->val) return find(t->l, val);

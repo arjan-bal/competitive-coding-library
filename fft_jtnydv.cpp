@@ -1,6 +1,6 @@
 //attribution: Jatin Yadav on codechef
 namespace fft{
-    #define ld float
+    #define ld double
     #define poly vector<ll>
 
     struct base{
@@ -60,7 +60,7 @@ namespace fft{
     }
 
     // 4 FFTs in total for a precise convolution
-    poly mul_big_mod(poly &a, poly &b, ll mod){
+    poly mult(poly &a, poly &b, ll mod){
         int n1 = a.size(),n2 = b.size();
         int final_size = a.size() + b.size() - 1;
         int n = 1;

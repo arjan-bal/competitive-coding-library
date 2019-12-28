@@ -37,9 +37,7 @@ void read(Arg1&& arg1, Args&&... args)
 #define pli                     pair<ll, int>
 #define pil                     pair<int, ll>
 #define pll                     pair<ll, ll>
-#define pdd                     pair<double, double>
 #define vi                      vector<int>
-#define vc                      vector<char>
 #define vll                     vector<ll>
 #define vb                      vector<bool>
 #define vd                      vector<double>
@@ -58,17 +56,23 @@ void read(Arg1&& arg1, Args&&... args)
 #define fr(i,n)                 for(int i=0; i<n;++i)
 #define fr1(i,n)                for(int i=1; i<=n; ++i)
 #define precise(x)              cout<<fixed<<setprecision(x)
+typedef double					f80;
 
+void solve()
+{
+	
+}
 
 int main()
 {
 	#ifdef LOCAL
-	//freopen("in.txt" , "r" , stdin);
+	freopen("in.txt" , "r" , stdin);
 	//freopen("out.txt" , "w" , stdout);
 	#else	
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	#endif
+	
 	
 	
 	return 0;

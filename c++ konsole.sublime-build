@@ -9,7 +9,11 @@
     [
         {
             "name": "Run",
-            "shell_cmd": "konsole --hold -e ${file_path}/./${file_base_name}",        
+            "shell_cmd": "konsole --hold -e ${file_path}/./${file_base_name}"        
+        },
+        {
+            "name": "Sanitize",
+            "shell_cmd": "g++ -std=c++11 -D LOCAL -Wall \"${file}\" -o \"${file_path}/${file_base_name}\" -fsanitize=address -fsanitize=undefined -D_GLIBCXX_DEBUG -g && konsole --hold -e \"${file_path}/./${file_base_name}\""       
         }
     ]
 }
