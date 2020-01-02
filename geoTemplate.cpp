@@ -16,7 +16,14 @@ namespace geometry{
 	pt operator*(base d, pt p){return {p.x*d, p.y*d};}
 	pt operator/(pt p, base d){return {p.x/d, p.y/d};}
 	pt operator/(base d, pt p){return {p.x/d, p.y/d};}
+	pt perp(pt p){return {-p.y, p.x};} // rotates +90 degrees
 	base cross(pt p1, pt p2){return p1.x*p2.y - p1.y*p2.x;}
+	pt rotl(pt p){return {-p.y, p.x};}
+	pt rotr(pt p){return {p.y, -p.x};}
+	//rotate p ’ang ’ radians ccw around origin
+    pt rotate(pt p, double ang){return {p.x*cos(ang)-p.y*sin(ang), p.x*sin(ang)+p.y*cos(ang)};}
+    pt unit(pt p){return p/dist(p);}
+    pt normal(pt p){return unit(perp(p));}
 
 	bool isParallel(pt a, pt b, pt c, pt d)
 	{
@@ -45,6 +52,7 @@ namespace geometry{
 
 	bool isBetween(pt a, pt b, pt c)
 	{
+		if(!isColinear(a, b, c)) return 0;
 	    return min(a.x, b.x)<=c.x && c.x<=max(a.x, b.x) && min(a.y, b.y)<=c.y && c.y<=max(a.y,b.y);
 	}
 
@@ -64,12 +72,16 @@ namespace geometry{
 
 	bool segmentIntersect(pt a, pt b, pt c, pt d)
 	{
-	    if(isColinear(a, b, c) && isBetween(a, b, c)) return 1;
-	    if(isColinear(a, b, d) && isBetween(a, b, d)) return 1;
-	    if(isColinear(c, d, a) && isBetween(c, d, a)) return 1;
-	    if(isColinear(c, d, b) && isBetween(c, d, b)) return 1;
+	    if(isBetween(a, b, c) || isBetween(a, b, d) || 
+	       isBetween(c, d, a) || isBetween(c, d, b)) return 1;
 	    return oppositeSides(a, b, c, d) && oppositeSides(c, d, a, b);
 	}
+}
+
+bool inTriangle(pt a, pt b, pt c, pt d)
+{
+    if(isBetween(a, b, d) || isBetween(a, c, d) || isBetween(b, c, d)) return 0; //change to allow pts on perimeter
+    return isLeft(a, b, d)==isLeft(b, c, d) && isLeft(c, a, d)==isLeft(b, c, d);
 }
 
 bool isConvex(vector<pt> &vertices)
