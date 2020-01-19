@@ -53,8 +53,9 @@ void read(Arg1&& arg1, Args&&... args)
 #define umap                    unordered_map
 #define all(x)                  x.begin(),x.end()
 #define clr(a,b)                memset(a,b,sizeof a)
-#define fr(i,n)                 for(int i=0; i<n;++i)
-#define fr1(i,n)                for(int i=1; i<=n; ++i)
+#define fr(i, n)                for(int i=0; i<n;++i)
+#define fr1(i, n)               for(int i=1; i<=n; ++i)
+#define rfr(i, n)			    for(int i=n-1; i>=0; --i)
 #define precise(x)              cout<<fixed<<setprecision(x)
 typedef double					f80;
 
@@ -65,15 +66,17 @@ void solve()
 
 int main()
 {
-	#ifdef LOCAL
+#ifdef LOCAL
 	freopen("in.txt" , "r" , stdin);
 	//freopen("out.txt" , "w" , stdout);
-	#else	
+#else	
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	#endif
+#endif
 	
-	
+	int t=1;
+	//read(t);
+	while(t--) solve();
 	
 	return 0;
 }

@@ -46,7 +46,6 @@ inline void push(int st, int en, int node)
 		lazy[(node<<1)|1]+=lazy[node];
 	}
 	lazy[node]=0;
-	return ;
 }
 
 inline void update(int st, int en, int node, int l, int r, int nv)

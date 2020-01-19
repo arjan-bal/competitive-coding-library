@@ -6,7 +6,8 @@ double det3(double a, double b, double c, double d, double e, double f, double g
 	return d0 + d2 - d1;
 }
  
-void centercircle(double& cx, double& cy, double& cr2, int a, int b, int c){
+void centercircle(double x1, double y1, double x2, double y2, double x3, double y3, double& cx, double& cy, double& cr2)
+{
 	double ssq[] = { (x1 * x1) + (y1 * y1),(x2 * x2) + (y2 * y2) ,(x3 * x3) + (y3 * y3) };
 	double A = det3(x1, y1, 1, x2, y2, 1, x3, y3, 1);
 	double B = -det3(ssq[0], y1, 1, ssq[1], y2, 1, ssq[2], y3, 1);
