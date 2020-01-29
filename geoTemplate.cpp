@@ -18,6 +18,7 @@ namespace geometry{
 	pt operator/(base d, pt p){return {p.x/d, p.y/d};}
 	pt perp(pt p){return {-p.y, p.x};} // rotates +90 degrees
 	base cross(pt p1, pt p2){return p1.x*p2.y - p1.y*p2.x;}
+	base dot(pt p1, pt p2){return p1.x*p2.x+p1.y*p2.y;}
 	pt rotl(pt p){return {-p.y, p.x};}
 	pt rotr(pt p){return {p.y, -p.x};}
 	//rotate p ’ang ’ radians ccw around origin
@@ -70,13 +71,30 @@ namespace geometry{
 		return -isColinear(a, b, c, d);
 	}
 
+	double lineDist(pt a, pt b, pt p){
+    	return abs(cross(b-a, p-a)/dist(b-a));
+	}
+
 	bool segmentIntersect(pt a, pt b, pt c, pt d)
 	{
 	    if(isBetween(a, b, c) || isBetween(a, b, d) || 
 	       isBetween(c, d, a) || isBetween(c, d, b)) return 1;
 	    return oppositeSides(a, b, c, d) && oppositeSides(c, d, a, b);
 	}
+
+	double segmentDistance(pt v, pt w, pt p)
+	{
+	 	double l2 = dist2(v-w); 
+	 	if (l2 == 0.0) return dist(p-v);
+	 	double t = max(double(0), min(double(1), dot(p - v, w - v) / l2));
+	 	pt projection = v + t * (w - v);
+	 	return dist2(p-projection);
+	}
 }
+
+using namespace geometry;
+
+
 
 bool inTriangle(pt a, pt b, pt c, pt d)
 {
