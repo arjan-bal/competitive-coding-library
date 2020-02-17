@@ -1,6 +1,6 @@
 /*
-Author: Arjan Singh Bal, IIITM Gwalior
-"Everything in this world is magic, except to the magician"
+	Author: Arjan Singh Bal, IIITM Gwalior
+	"Everything in this world is magic, except to the magician"
 */
 
 #include                        <bits/stdc++.h>
