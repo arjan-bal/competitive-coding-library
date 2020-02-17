@@ -1,27 +1,18 @@
 //mantains minimum hull
 struct CHT{
     typedef pll line;
-    double o1=1, infy=1e40;
+    double infy=1e40;
 
     vector<line> hull;
 
-    void prnhull()
-    {
-        for(auto i:hull) prn2(i.ff, i.ss);
-            cout<<"\n";
-    }
-
-    ll val(line l, ll x)
-    {
-        return l.ff*x+l.ss;
-    }
+    #define val(l, x) (l.ffa*x+l.ss)
 
     double ovrtake(line l1, line l2)
     {
         if(l1.ff==l2.ff)
             if(l1.ss<l2.ss) return -infy;
             else return infy;
-        return (o1*l2.ss-l1.ss)/(l1.ff-l2.ff);
+        return double(l2.ss-l1.ss)/(l1.ff-l2.ff);
     }
 
     //adds line only in decreasing slope
@@ -32,7 +23,6 @@ struct CHT{
             if((n=hull.size()) && ovrtake(l, hull[n-2])<=ovrtake(hull[n-1], hull[n-2])) hull.ppb();
             else break;
         hull.pb(l);
-        return ;
     }
 
     ll eval(ll x)
