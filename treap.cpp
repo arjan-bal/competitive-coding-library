@@ -10,8 +10,8 @@ struct node{
 };
 
 typedef node* pnode;
-int sz(pnode t)
-{ return t?t->size:0; }
+
+#define sz(t) (t?t->size:0)
 
 void update(pnode t)
 {
@@ -86,17 +86,3 @@ ll kth(pnode t, int k)		//kth smallest
 }
 
 pnode root=0;
-
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    int x;
-    fr(i, 5){
-    	cin>>x;
-    	node *tmp=new node(x);
-    	insert(root, tmp);
-    	disp(root);
-    	cout<<"\n";
-    }
-    return 0;
-}

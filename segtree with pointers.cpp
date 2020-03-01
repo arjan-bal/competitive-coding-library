@@ -12,17 +12,13 @@ inline void build(int st, int en, pnode &cur)
 		cur.val=arr[st];
 		return ;
 	}
-	int mid=((st+en)>>1);
+	int mid=(st+en)>>1;
 	build(st, mid, cur->l);
 	build(mid+1, en, cur->r);
 	cur.val=cur->l->val+cur->r->val;
 }
 
-inline int valf(pnode x)
-{
-	if(!x) return 0;
-	return x->val;
-}
+#define valf(x) (x?x->val:0)
 
 inline void update(int st, int en, pnode &cur, int idx, int nv)
 {
@@ -32,7 +28,7 @@ inline void update(int st, int en, pnode &cur, int idx, int nv)
 		cur->val+=nv;
 		return ;
 	}
-	int mid=((st+en)>>1);
+	int mid=(st+en)>>1;
 	if(idx<=mid) update(st, mid, cur->l, idx, nv);
 	else update(mid+1, en, cur->r, idx, nv);
 	cur->val=valf(cur->l)+valf(cur->r);
@@ -42,7 +38,7 @@ inline int query(int st, int en, pnode cur, int l, int r)
 {
 	if(st>r || en<l || !cur) return 0;
 	if(st>=l && en<=r) return cur->val;
-	int mid=((st+en)>>1);
+	int mid=(st+en)>>1;
 	return query(st, mid, cur->l, l, r)+query(mid+1, en, cur->r, l, r);
 }
 
@@ -77,7 +73,7 @@ inline void update(int st, int en, pnode &cur, int l, int r, int nv)
 		push(st, en, cur);
 		return ;
 	}
-	int mid=((st+en)>>1);
+	int mid=(st+en)>>1;
 	if(l<=mid) update(st, mid, cur->l, l, r, nv);
 	if(r>mid) update(mid+1, en, cur->r, l, r, nv);
 	cur->val=valf(cur->l)+valf(cur->r);
@@ -89,6 +85,6 @@ inline int query(int st, int en, pnode &cur, int l, int r)
 	if(st>r || en<l) return 0;
 	if(!cur) return 0;
 	if(st>=l && en<=r) return cur->val;
-	int mid=((st+en)>>1);
+	int mid=(st+en)>>1;
 	return query(st, mid, cur->l, l, r)+query(mid+1, en, cur->r, l, r);
 }

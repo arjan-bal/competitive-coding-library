@@ -3,15 +3,12 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 struct node{
 	int prior=rng(), val, size=1;
 	node *l=0, *r=0;
-	node(int v)
-	{
-		val=v;		
-	}
+	node(int v):val(v){}
 };
 
 typedef node* pnode;
 
-inline int sz(pnode t){ return t?t->size:0; }
+#define sz(t) (t?t->size:0)
 
 inline void update(pnode t)
 {
