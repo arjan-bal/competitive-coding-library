@@ -1,4 +1,4 @@
-/// attribution: https://codeforces.com/contest/1314/submission/71724665
+///RMQ attribution: https://codeforces.com/contest/1314/submission/71724665
 template<typename T, bool maximum_mode = false>
 struct RMQ {
     int n = 0, levels = 0;

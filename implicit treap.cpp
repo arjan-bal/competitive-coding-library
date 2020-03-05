@@ -15,7 +15,7 @@ inline void update(pnode t)
 	if(t) t->size = sz(t->l)+1+sz(t->r);
 }
 
-//l=pos<pos && r=pos>=pos
+//l=[0, key), r=[key, n)
 inline void split(pnode t,pnode &l,pnode &r, int key, int add=0)
 {		
     if(!t) return void(l=r=0);

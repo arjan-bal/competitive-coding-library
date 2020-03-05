@@ -23,7 +23,7 @@ matrix multiply(matrix &mat1, matrix &mat2)
 	return ret;
 }
 
-void power(matrix &res, ll ex)
+matrix power(matrix &res, ll ex)
 {
 	matrix M=res;
 	--ex;
