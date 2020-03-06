@@ -58,4 +58,4 @@ inline void erase(pnode &t, int pos)
 	else erase(t->r, pos-sz(t->l)-1);
 }
 
-pnode root=0;
+// pnode root=0;

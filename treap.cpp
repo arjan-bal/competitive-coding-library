@@ -85,4 +85,4 @@ ll kth(pnode t, int k)		//kth smallest
 	return kth(t->r, k-1-sz(t->l));
 }
 
-pnode root=0;
+// pnode root=0;
