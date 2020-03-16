@@ -12,25 +12,24 @@ using namespace std;
 
 template <typename Arg1>
 void prn(Arg1&& arg1)
-{
-    cout<<arg1<<"\n";
-}
+{ cout<<arg1<<"\n";}
 template <typename Arg1, typename... Args>
 void prn(Arg1&& arg1, Args&&... args)
-{
-    cout<<arg1<<" "; prn(args...);
-}
+{ cout<<arg1<<" "; prn(args...); }
+
+template <typename Arg1>
+void prs(Arg1&& arg1)
+{ cout<<arg1<<" ";}
+template <typename Arg1, typename... Args>
+void prs(Arg1&& arg1, Args&&... args)
+{ cout<<arg1<<" "; prs(args...); }
 
 template <typename Arg1>
 void read(Arg1&& arg1)
-{
-    cin>>arg1 ;
-}
+{ cin>>arg1; }
 template <typename Arg1, typename... Args>
 void read(Arg1&& arg1, Args&&... args)
-{
-    cin>>arg1; read(args...);
-}
+{ cin>>arg1; read(args...); }
 
 #define ll                      long long
 #define pii                     pair<int, int>
@@ -76,7 +75,10 @@ int main()
 	
 	int t=1;
 	//read(t);
-	while(t--) solve();
+	fr1(tc, t){
+		//cout<<"Case #"<<tc<<": ";
+		solve();
+	}
 	
 	return 0;
 }

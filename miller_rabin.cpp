@@ -9,7 +9,7 @@ inline ll mul(ll a, ll b, ll mod)
 { 
 	a %= mod;
 	b %= mod;
-	if(mod < 2e9) return a*b%mod;
+	if(mod <= 2e9) return a*b%mod;
     ll res = 0; 
     while (b > 0){ 
         if (b % 2 == 1) res = (res + a) % mod; 
@@ -38,8 +38,7 @@ bool miller_rabin(ll p, int t = 7)		//t = 7 for SPRP base
     ll x = p - 1;
     int e = __builtin_ctzll(x);
     x >>= e;
-    while(t--)
-    {
+    while(t--){
         //ll witness = (rng() % (p-3)) + 2;	//Using random witness
         ll witness = SPRP[t];
         witness = power(witness%p, x, p);

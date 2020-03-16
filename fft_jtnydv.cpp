@@ -24,7 +24,7 @@ namespace fft{
     };
     double PI = 2.0*acos(0.0);
     const int MAXN = 19;
-    const int maxn = (1<<MAXN);
+    const int maxn = 1<<MAXN;
     base W[maxn],invW[maxn], P1[maxn], Q1[maxn];
     void precompute_powers(){
         for(int i = 0;i<maxn/2;i++){
