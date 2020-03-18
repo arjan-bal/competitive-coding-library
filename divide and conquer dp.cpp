@@ -1,6 +1,8 @@
 /*
 	attribution: cp-algorithms.com
-	necessary condition: opt(i,j) ≤ opt(i,j+1)
+	necessary conditions:
+	dp(i,j)= min k ≤ j {dp(i−1,k-1)+C(k,j)} 
+	opt(i,j) ≤ opt(i,j+1)
 */
 
 bool act=0;		//keep toggling active
@@ -11,10 +13,7 @@ int dp[2][N];
 inline void compute(int l, int r, int optl, int optr)
 {
 	if(l > r) return;
-    int mid = (l + r) >> 1;
-    int &best = dp[act][mid], cur;
-    best = inf;
-    int opt = -1, en = min(mid, optr);
+    int mid = (l + r) >> 1, en = min(mid, optr), &best = dp[act][mid] = inf, cur, opt;
 
     for(int k = optl; k <= en; ++k) {
     	cur = dp[!act][k-1] + C[k][mid];
@@ -24,8 +23,10 @@ inline void compute(int l, int r, int optl, int optr)
     compute(l, mid - 1, optl, opt);
     compute(mid + 1, r, opt, optr);
 }
-
-fr1(take, k){
-	act^=1;
-	compute(take, n, take, n);
-}
+/*
+	// 1 based indexing
+	for(int groups=1; groups<=k; ++groups){
+		act^=1;
+		compute(groups, n, groups, n);
+	}
+*/
