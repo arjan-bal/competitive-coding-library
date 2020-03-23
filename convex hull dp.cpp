@@ -1,21 +1,22 @@
-//mantains minimum hull
+// mantains minimum hull
 struct CHT{
     typedef pll line;
     double infy=1e40;
 
     vector<line> hull;
 
-    #define val(l, x) (l.ffa*x+l.ss)
+    #define val(l, x) (l.ff*x+l.ss)
 
     double ovrtake(line l1, line l2)
     {
         if(l1.ff==l2.ff)
-            if(l1.ss<l2.ss) return -infy;
+            if(l1.ss<l2.ss) return -infy;	//reverse for max hull
             else return infy;
         return double(l2.ss-l1.ss)/(l1.ff-l2.ff);
     }
 
-    //adds line only in decreasing slope
+    // add lines in decreasing slope for min
+    // and increasing slope for max
     void add_line(line l)
     {
         int n;
@@ -27,7 +28,7 @@ struct CHT{
 
     ll eval(ll x)
     {
-        if(hull.empty()) return inf;
+        if(hull.empty()) return inf;	// change to -inf and <= to >= below for max hull
         if(hull.size()==1) return val(hull[0], x);
         int n=hull.size(), en=hull.size()-1, st=0, mid;
         while(st<=en)
