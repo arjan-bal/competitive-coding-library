@@ -6,7 +6,7 @@ void reshape(matrix &mat, int n, int m)
 	for(auto &i:mat) i.resize(m);
 }
 
-matrix multiply(matrix &mat1, matrix &mat2)
+matrix operator*(matrix &mat1, matrix &mat2)
 {
 	int n1=mat1.size(), m1=mat1[0].size(), n2=mat2.size(), m2=mat2[0].size();
 	assert(m1==n2);
@@ -23,13 +23,13 @@ matrix multiply(matrix &mat1, matrix &mat2)
 	return ret;
 }
 
-matrix power(matrix &res, ll ex)
+matrix power(matrix res, ll ex)
 {
-	matrix M=res;
+	matrix tmp=res;
 	--ex;
 	while(ex>0){
-		if(ex&1) res=multiply(res, M);
-		M=multiply(M, M);
+		if(ex&1) res=res*tmp;
+		tmp=tmp*tmp;
 		ex>>=1;
 	}
 	return res;
