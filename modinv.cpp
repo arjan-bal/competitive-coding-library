@@ -1,6 +1,6 @@
 ll power(ll x, ll y, ll m)
 {
-    if (y==0) return 1;
+    if(!y) return 1;
     ll p=power(x, y>>1, m)%m;
     p=p*p%m; 
     return (y&1)?(x*p)%m:p;

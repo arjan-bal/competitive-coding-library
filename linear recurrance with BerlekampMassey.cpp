@@ -1,8 +1,11 @@
-//attributation: https://github.com/zimpha/algorithmic-library/blob/master/mathematics/linear-recurrence.cc
-// given first m items init[0..m-1] and coefficents trans[0..m-1] or
-// given first 2 *m items init[0..2m-1], it will compute trans[0..m-1]
-// for you. trans[0..m] should be given as that 
-//      init[m] = sum_{i=0}^{m-1} init[i] * trans[i]
+/*
+	attributation: https://github.com/zimpha/algorithmic-library/blob/master/mathematics/linear-recurrence.cc
+	given first m items init[0..m-1] and coefficents trans[0..m-1] or
+	given first 2 *m items init[0..2m-1], it will compute trans[0..m-1]
+	for you. trans[0..m] should be given as that 
+	init[m] = sum_{i=0}^{m-1} init[i] * trans[i]
+*/
+
 struct LinearRecurrence {
 	using int64 = long long;
 	using vec = std::vector<int64>;

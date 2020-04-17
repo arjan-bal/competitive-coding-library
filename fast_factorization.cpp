@@ -117,7 +117,7 @@ namespace ffac{
 	        }
 	    }	    
 	    sort(all(prmDiv));
-	    prmDiv.erase( unique(all(prmDiv)), prmDiv.end());
+	    prmDiv.erase(unique(all(prmDiv)), prmDiv.end());
 	    return prmDiv;
 	}
 }

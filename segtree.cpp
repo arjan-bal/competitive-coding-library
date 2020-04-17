@@ -53,7 +53,7 @@ inline void update(int st, int en, int node, int l, int r, int nv)
 	if(lazy[node]) push(st, en, node);
 	if(st>r || en<l) return ;
 	if(st>=l && en<=r){
-		lazy[node]+=nv;
+		lazy[node]=nv;
 		push(st, en, node);
 		return ;
 	}

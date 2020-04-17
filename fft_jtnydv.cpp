@@ -26,6 +26,7 @@ namespace fft{
     const int MAXN = 19;
     const int maxn = 1<<MAXN;
     base W[maxn],invW[maxn], P1[maxn], Q1[maxn];
+    bool fst=1;
     void precompute_powers(){
         for(int i = 0;i<maxn/2;i++){
             double ang = (2*PI*i)/maxn; 
@@ -35,6 +36,7 @@ namespace fft{
         }
     }
     void fft (vector<base> & a, bool invert) {
+    	if(fst) precompute_powers(), fst = 0;
         int n = (int) a.size();
      
         for (int i=1, j=0; i<n; ++i) {
@@ -96,8 +98,4 @@ namespace fft{
         }
         return ret;
     }
-}
-
-int main(){
-    precompute_powers();
 }

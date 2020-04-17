@@ -1,14 +1,6 @@
-#include 						<bits/stdc++.h>
-#define ll						long long
-#define vi 						vector<int>
-#define ff 						first
-#define ss 						second
-
-using namespace std;
-
 //refference: https://discuss.codechef.com/questions/65993/rng-editorial
 
-const int mod = 663224321;
+const int mod = 1e9+7;
  
 inline void add(int &a, int b) {
     a += b;
@@ -59,196 +51,201 @@ inline int inv(int a) {
     return u;
 }
 
-#define ld float
-#define vll vector<ll>
+//attribution: Jatin Yadav on codechef
+namespace fft{
+    #define ld double
+    #define poly vector<ll>
 
-struct base{
-    ld x,y;
-    base(){x=y=0;}
-    base(ld _x, ld _y){x = _x,y = _y;}
-    base(ld _x){x = _x, y = 0;}
-    void operator = (ld _x){x = _x,y = 0;}
-    ld real(){return x;}
-    ld imag(){return y;}
-    base operator + (const base& b){return base(x+b.x,y+b.y);}
-    void operator += (const base& b){x+=b.x,y+=b.y;}
-    base operator * (const base& b){return base(x*b.x - y*b.y,x*b.y+y*b.x);}
-    void operator *= (const base& b){ld p = x*b.x - y*b.y, q = x*b.y+y*b.x; x = p, y = q;}
-    void operator /= (ld k){x/=k,y/=k;}
-    base operator - (const base& b){return base(x - b.x,y - b.y);}
-    void operator -= (const base& b){x -= b.x, y -= b.y;}
-    base conj(){ return base(x, -y);}
-    base operator / (ld k) { return base(x / k, y / k);}
-    void Print(){ cerr << x <<  " + " << y << "i\n";}
-};
-double PI = 2.0*acos(0.0);
-const int MAXN = 19;
-const int maxn = (1<<MAXN);
-base W[maxn],invW[maxn], P1[maxn], Q1[maxn];
-void precompute_powers(){
-    for(int i = 0;i<maxn/2;i++){
-        double ang = (2*PI*i)/maxn; 
-        ld _cos = cos(ang), _sin = sin(ang);
-        W[i] = base(_cos,_sin);
-        invW[i] = base(_cos,-_sin);
-    }
-}
-void fft (vector<base> & a, bool invert) {
-    int n = (int) a.size();
- 
-    for (int i=1, j=0; i<n; ++i) {
-        int bit = n >> 1;
-        for (; j>=bit; bit>>=1)
-            j -= bit;
-        j += bit;
-        if (i < j)
-            swap (a[i], a[j]);
-    }
-    for (int len=2; len<=n; len<<=1) {
-        for (int i=0; i<n; i+=len) {
-            int ind = 0,add = maxn/len;
-            for (int j=0; j<len/2; ++j) {
-                base u = a[i+j],  v = (a[i+j+len/2] * (invert?invW[ind]:W[ind]));
-                a[i+j] = (u + v);
-                a[i+j+len/2] = (u - v);
-                ind += add;
-            }
+    struct base{
+        ld x,y;
+        base(){x=y=0;}
+        base(ld _x, ld _y){x = _x,y = _y;}
+        base(ld _x){x = _x, y = 0;}
+        void operator = (ld _x){x = _x,y = 0;}
+        ld real(){return x;}
+        ld imag(){return y;}
+        base operator + (const base& b){return base(x+b.x,y+b.y);}
+        void operator += (const base& b){x+=b.x,y+=b.y;}
+        base operator * (const base& b){return base(x*b.x - y*b.y,x*b.y+y*b.x);}
+        void operator *= (const base& b){ld p = x*b.x - y*b.y, q = x*b.y+y*b.x; x = p, y = q;}
+        void operator /= (ld k){x/=k,y/=k;}
+        base operator - (const base& b){return base(x - b.x,y - b.y);}
+        void operator -= (const base& b){x -= b.x, y -= b.y;}
+        base conj(){ return base(x, -y);}
+        base operator / (ld k) { return base(x / k, y / k);}
+        void Print(){ cerr << x <<  " + " << y << "i\n";}
+    };
+    double PI = 2.0*acos(0.0);
+    const int MAXN = 17;
+    const int maxn = 1<<MAXN;
+    base W[maxn],invW[maxn], P1[maxn], Q1[maxn];
+    bool fst = 1;
+    void precompute_powers(){
+        for(int i = 0;i<maxn/2;i++){
+            double ang = (2*PI*i)/maxn; 
+            ld _cos = cos(ang), _sin = sin(ang);
+            W[i] = base(_cos,_sin);
+            invW[i] = base(_cos,-_sin);
         }
     }
-    if (invert) for (int i=0; i<n; ++i) a[i] /= n;
+    void fft (vector<base> & a, bool invert) {
+    	if(fst) precompute_powers(), fst = 0;
+        int n = (int) a.size();
+     
+        for (int i=1, j=0; i<n; ++i) {
+            int bit = n >> 1;
+            for (; j>=bit; bit>>=1)
+                j -= bit;
+            j += bit;
+            if (i < j)
+                swap (a[i], a[j]);
+        }
+        for (int len=2; len<=n; len<<=1) {
+            for (int i=0; i<n; i+=len) {
+                int ind = 0,add = maxn/len;
+                for (int j=0; j<len/2; ++j) {
+                    base u = a[i+j],  v = (a[i+j+len/2] * (invert?invW[ind]:W[ind]));
+                    a[i+j] = (u + v);
+                    a[i+j+len/2] = (u - v);
+                    ind += add;
+                }
+            }
+        }
+        if (invert) for (int i=0; i<n; ++i) a[i] /= n;
+    }
+
+    // 4 FFTs in total for a precise convolution
+    poly mult(poly &a, poly &b, ll mod){
+        int n1 = a.size(),n2 = b.size();
+        int final_size = a.size() + b.size() - 1;
+        int n = 1;
+        while(n < final_size) n <<= 1;
+        vector<base> P(n), Q(n);
+        int SQRTMOD = (int)sqrt(mod) + 10;
+        for(int i = 0;i < n1;i++) P[i] = base(a[i] % SQRTMOD, a[i] / SQRTMOD);
+        for(int i = 0;i < n2;i++) Q[i] = base(b[i] % SQRTMOD, b[i] / SQRTMOD);
+        fft(P, 0);
+        fft(Q, 0);
+        base A1, A2, B1, B2, X, Y;
+        for(int i = 0; i < n; i++){
+            X = P[i];
+            Y = P[(n - i) % n].conj();
+            A1 = (X + Y) * base(0.5, 0);
+            A2 = (X - Y) * base(0, -0.5);
+            X = Q[i];
+            Y = Q[(n - i) % n].conj();
+            B1 = (X + Y) * base(0.5, 0);
+            B2 = (X - Y) * base(0, -0.5);
+            P1[i] = A1 * B1 + A2 * B2 * base(0, 1);
+            Q1[i] = A1 * B2 + A2 * B1;
+        }
+        for(int i = 0; i < n; i++) P[i] = P1[i], Q[i] = Q1[i];
+        fft(P, 1);
+        fft(Q, 1);
+        poly ret(final_size);
+        for(int i = 0; i < final_size; i++){
+            ll x = (ll)(P[i].real() + 0.5);
+            ll y = (ll)(P[i].imag() + 0.5) % mod;
+            ll z = (ll)(Q[i].real() + 0.5);
+            ret[i] = (x + ((y * SQRTMOD + z) % mod) * SQRTMOD) % mod;
+        }
+        return ret;
+    }
 }
 
-// 4 FFTs in total for a precise convolution
-void mul_big_mod(vll &a, vll & b, ll mod){
-    int n1 = a.size(),n2 = b.size();
-    int final_size = a.size() + b.size() - 1;
-    int n = 1;
-    while(n < final_size) n <<= 1;
-    vector<base> P(n), Q(n);
-    int SQRTMOD = (int)sqrt(mod) + 10;
-    for(int i = 0;i < n1;i++) P[i] = base(a[i] % SQRTMOD, a[i] / SQRTMOD);
-    for(int i = 0;i < n2;i++) Q[i] = base(b[i] % SQRTMOD, b[i] / SQRTMOD);
-    fft(P, 0);
-    fft(Q, 0);
-    base A1, A2, B1, B2, X, Y;
-    for(int i = 0; i < n; i++){
-        X = P[i];
-        Y = P[(n - i) % n].conj();
-        A1 = (X + Y) * base(0.5, 0);
-        A2 = (X - Y) * base(0, -0.5);
-        X = Q[i];
-        Y = Q[(n - i) % n].conj();
-        B1 = (X + Y) * base(0.5, 0);
-        B2 = (X - Y) * base(0, -0.5);
-        P1[i] = A1 * B1 + A2 * B2 * base(0, 1);
-        Q1[i] = A1 * B2 + A2 * B1;
-    }
-    for(int i = 0; i < n; i++) P[i] = P1[i], Q[i] = Q1[i];
-    fft(P, 1);
-    fft(Q, 1);
-    a.resize(final_size);
-    for(int i = 0; i < final_size; i++){
-        ll x = (ll)(P[i].real() + 0.5);
-        ll y = (ll)(P[i].imag() + 0.5) % mod;
-        ll z = (ll)(Q[i].real() + 0.5);
-        a[i] = (x + ((y * SQRTMOD + z) % mod) * SQRTMOD) % mod;
-    }
-}
+
 //use your favourate fast polynomial multiplication algo here
-vi mult(vi a,vi b, int upper_limit = 1e9) {
-	vi c;
+vll mult(vll a,vll b, int upper_limit = 1e9) {
+	vll c;
     int sz1 = a.size();
     int sz2 = b.size();
     if(min(sz1, sz2)<=5){
     	c.resize(sz1 + sz2 - 1);
         for (int i = 0;i < sz1;++i)
             for (int j = 0;j < sz2;++j)
-                add(c[i + j],mul(a[i],b[j]));
+                c[i + j]=(c[i+j]+a[i]*b[j])%mod;
     }
-    else{
-    	vll a1(a.begin(), a.end()), b1(b.begin(), b.end());
-    	mul_big_mod(a1, b1, mod);
-    	c=vi(a1.begin(), a1.end());
-    }
-    if(c.size() > upper_limit) c.resize(upper_limit);
+    else c=fft::mult(a, b, mod);
+    if((int)c.size() > upper_limit) c.resize(upper_limit);
     return c;
 }
 
 //attribution: https://www.codechef.com/viewsolution/19110694
 namespace poly_ops{
+	typedef ll base;
 	inline int add(int x, int y){ x += y; if(x >= mod) x -= mod; return x;}
 	inline int sub(int x, int y){ x -= y; if(x < 0) x += mod; return x;}
 
-	vi truncate_end(vi v){
+	vector<base> truncate_end(vector<base> v){
 	    while(!v.empty() && v.back() == 0) v.pop_back();
 	    if(v.empty()) v = {0};
 	    return v;
 	}
 
-	vi add(vi a, vi b){
-	    vi ret(max(a.size(), b.size()));
-	    for(int i = 0; i < ret.size(); i++){
-	        ret[i] = add(i < a.size() ? a[i] : 0, i < b.size() ? b[i] : 0);
+	vector<base> add(vector<base> a, vector<base> b){
+	    vector<base> ret(max(a.size(), b.size()));
+	    for(int i = 0; i < (int)ret.size(); i++){
+	        ret[i] = add(i < (int)a.size() ? a[i] : 0, i < (int)b.size() ? b[i] : 0);
 	    }
 	    return ret;
 	}
 
-	vi sub(vi a, vi b){ 
-	    vi ret(max(a.size(), b.size()));
-	    for(int i = 0; i < ret.size(); i++){
-	        ret[i] = sub(i < a.size() ? a[i] : 0, i < b.size() ? b[i] : 0);
+	vector<base> sub(vector<base> a, vector<base> b){ 
+	    vector<base> ret(max(a.size(), b.size()));
+	    for(int i = 0; i < (int)ret.size(); i++){
+	        ret[i] = sub(i < (int)a.size() ? a[i] : 0, i < (int)b.size() ? b[i] : 0);
 	    }
 	    return ret;
 	}
 
-	vi mul_scalar(vi v, int k){
+	vector<base> mul_scalar(vector<base> v, int k){
 	    for(auto & it : v) it = mul(k, it);
 	    return v;
 	}
 
-	vi get_first(vi v, int k){
+	vector<base> get_first(vector<base> v, int k){
 	    v.resize(min((int)v.size(), k));
 	    return v;
 	}
 
-	vi inverse(vi a, int sz){
+	vector<base> inverse(vector<base> a, int sz){
 	    assert(a[0] != 0);
-	    vi x = {inv(a[0])};
-	    while(x.size() < sz){
-	        vi temp(a.begin(), a.begin() + min(a.size(), 2 * x.size()));
-	        vi nx = mult(mult(x, x), temp);
+	    vector<base> x = {inv(a[0])};
+	    while((int)x.size() < sz){
+	        vector<base> temp(a.begin(), a.begin() + min(a.size(), 2 * x.size()));
+	        vector<base> nx = mult(mult(x, x), temp);
 	        x.resize(2 * x.size());
-	        for(int i = 0; i < x.size(); i++)
+	        for(int i = 0; i < (int)x.size(); i++)
 	            x[i] = sub(add(x[i], x[i]), nx[i]);
 	    }
 	    x.resize(sz);
 	    return x;
 	}
 
-	vi differentiate(vi f){
-	    for(int i = 0; i + 1 < f.size(); i++) f[i] = mul(i + 1, f[i + 1]);
+	vector<base> differentiate(vector<base> f){
+	    for(int i = 0; i + 1 < (int)f.size(); i++) f[i] = mul(i + 1, f[i + 1]);
 	    if(!f.empty()) f.resize(f.size() - 1);
 	    if(f.empty()) f = {0};
 	    return f;
 	}
 
-	vi integrate(vi f, int c = 0){
+	vector<base> integrate(vector<base> f, int c = 0){
 	    f.resize(f.size() + 1);
 	    for(int i = f.size(); i >= 1; i--) f[i] = mul(f[i - 1], inv(i));
 	    f[0] = c;
 	    return f;
 	}
 
-	vi Log(vi f, int k){
+	vector<base> Log(vector<base> f, int k){
 	    assert(f[0] == 1);
-	    vi inv_f = inverse(f, k);
+	    vector<base> inv_f = inverse(f, k);
 	    return integrate(mult(differentiate(f), inv_f, k))   ;
 	}
 
-	vi Exp(vi f, int k){
+	vector<base> Exp(vector<base> f, int k){
 	    assert(f[0] == 0);
-	    vi g = {1};
-	    while(g.size() < k){
+	    vector<base> g = {1};
+	    while((int)g.size() < k){
 	        int curr_sz = g.size();
 	        g = mult(g, get_first(add(f, sub({1}, Log(g, 2 * curr_sz))), 2 * curr_sz), 2 * curr_sz);
 	    }
@@ -257,84 +254,71 @@ namespace poly_ops{
 	    return g;
 	}
 
-	vi powr(vi X, long long n, int k){
+	vector<base> powr(vector<base> X, long long n, int k){
 	    int common = X[0];
 	    int inv_com = inv(common);
 	    X = mul_scalar(X, inv_com);
 	    n %= mod;
-	    vi ret = Exp(mul_scalar(Log(X, k + 1), n), k);
+	    vector<base> ret = Exp(mul_scalar(Log(X, k + 1), n), k);
 	    ret.resize(k);
 	    ret = mul_scalar(ret, power(common, n));
 	    return ret;
 	}
 
-	pair<vi, vi> divmod(vi f, vi g){
-	    if(f.size() < g.size()) return {{0}, f};
+	vector<base> divmod(vector<base> f, vector<base> g){
+	    if(f.size() < g.size()) return f;
 	    int sz = f.size() - g.size() + 1;
 	    reverse(f.begin(), f.end()); reverse(g.begin(), g.end());
-	    vi inv2 = inverse(g, sz);
-	    vi _p = f; _p.resize(sz);
-	    vi q = mult(inv2, _p);
+	    vector<base> inv2 = inverse(g, sz);
+	    vector<base> _p = f; _p.resize(sz);
+	    vector<base> q = mult(inv2, _p);
 	    q.resize(sz);
 	    reverse(q.begin(), q.end()); reverse(f.begin(), f.end()); reverse(g.begin(), g.end());
-	    return {q, truncate_end(sub(f, mult(g, q)))};
+	    return truncate_end(sub(f, mult(g, q)));
 	}
 }
 
-//recurrance defined by: f[n] = sigma(i from k->1) f[n-i]*rec[k-i]
+//recurrance defined by: f[n] = sigma(i from n->1) f[n-i]*rec[n-i]
 struct linearRecurrance{
-	vi M, xxx={0, 1};	//don't change these
-	vi base;	//value of f[0..k-1]
-	vi rec;		//value of coefficients of recursion 
-	int k;		//size of recursion
-	
-	linearRecurrance(vi base, vi recurrance):base(base), rec(recurrance), k(recurrance.size())
+	vll M;	//don't change these
+	vll base;	//value of f[0..n-1]
+	vll rec;		//value of coefficients of recursion 
+	int n;		//size of recursion
+	vll pre_powers[61];	//precalculate powers to save time
+
+	linearRecurrance(vll _base, vll _rec):base(_base), rec(_rec), n(_rec.size())
 	{
-		M.resize(k+1);
-		M[k]=1;
-		for(int i=0; i<k; ++i){
-			M[i]=mod-rec[i];
+		M.resize(n+1);
+		M[n]=1;
+		for(int i=0; i<n; ++i)
+			M[i]=(mod-rec[i])%mod;
+		ll cur;
+		for(int i=0; i<61; ++i){
+			cur=1LL<<i;
+			if(cur<n){
+				pre_powers[i].assign(cur+1, 0);
+				pre_powers[i][cur]=1;
+				continue;
+			}
+			pre_powers[i]=poly_ops::divmod(mult(pre_powers[i-1], pre_powers[i-1]), M);
 		}
-	}
-	
-	vi power(int ex)
-	{
-		if(ex<k){
-			vi ret(ex+1, 0);
-			ret[ex]=1;
-			return ret;
-		}
-		vi vec=power(ex/2);
-		vec=mult(vec, vec);
-		if(ex%2) vec=mult(vec, xxx);
-		vec=poly_ops::divmod(vec, M).ss;
-		return vec;
 	}
 
-	int nth_term(ll n)
+	ll kth_term(ll k)
 	{
-		if(n<k) return base[n];
-		vi vec=power(n);
-		int ans=0;
-		for(int i=0; i<k; ++i){
-			ans=(ans+1LL*vec[i]*base[i])%mod;
+		if(k<(int)base.size()) return base[k];
+		vll vec;
+		if(k<n){
+			vec.assign(k+1, 0);
+			vec[k]=1;
+		} else {
+			vec={1};
+			for(int i=0; (1LL<<i)<=k; ++i)
+				if((k>>i)&1) vec=poly_ops::divmod(mult(vec, pre_powers[i]), M);
 		}
+		ll ans=0;
+		for(int i=0; i<n; ++i)
+			ans=(ans+vec[i]*base[i])%mod;
 		return ans;
 	}	
 };
-
-int main()
-{
-	//freopen("in.txt" , "r" , stdin) ;
-	//freopen("out.txt" , "w" , stdout) ;
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	precompute_powers();
-	
-	vi rec={1, 2, 1};
-	vi base={0, 10, 1};
-	linearRecurrance linrec(base, rec);
-	
-	cout<<linrec.nth_term(100);
-	return 0;
-}

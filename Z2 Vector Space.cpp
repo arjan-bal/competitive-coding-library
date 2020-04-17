@@ -8,7 +8,7 @@ struct vectorSpace{
 		D=_D;
 		basis.resize(D, 0);
 	}
-	void insert(int mask)
+	void insert(base mask)
 	{
 		if(sz==D) return ;
 		for(int i=D-1; i>=0; --i){			
@@ -21,7 +21,7 @@ struct vectorSpace{
 			mask^=basis[i];
 		}
 	}
-	bool represent(int mask)
+	bool represent(base mask)
 	{
 		if(sz==D) return 1;
 		for(int i=D-1; i>=0; --i){

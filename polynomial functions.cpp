@@ -508,8 +508,6 @@ const int mod = 1e9 + 7;
 typedef modular<mod> base;
 typedef poly<base> polyn;
 
-using namespace algebra;
-
 signed main() {
 	ios::sync_with_stdio(0);
 	cin.tie(0);

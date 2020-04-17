@@ -1,3 +1,7 @@
+int disc[N], low[N], parent[N];
+bool isbrg[M];
+vpii adj[N];
+
 void dfs(int cur)
 {
 	disc[cur]=low[cur]=ctr++;
@@ -12,7 +16,6 @@ void dfs(int cur)
 		if(low[i.ff]<=low[cur]) low[cur]=low[i.ff];
 		else if(low[i.ff]>disc[cur]) isbrg[i.ss]=1;
 	}
-	return ;
 }
 
 //take ctr>=1
