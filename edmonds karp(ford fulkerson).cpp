@@ -1,29 +1,33 @@
+const int N=2e3+1;
 int inf=1e9;
 
-vi par;
+int cap[N][N];
+vector<int> par, adj[N];
 
-void init(int n)
+void add_edge(int a, int b, int c)
 {
-    par.resize(n);
+    cap[a][b]+=c;
+    adj[a].pb(b);
+    adj[b].pb(a);
 }
 
 int bfs(int s, int t)
 {
     fill(all(par), -1);
     par[s]=-2;
-    queue<pii> q;
-    q.push(mp(s, inf));
-    pii top;
+    queue<pair<int, int>> q;
+    q.push({s, inf});
+    pair<int, int> top;
     int nf;
     while(!q.empty()){
         top=q.front();
         q.pop();
-        for(auto i:adj[top.ff]){
-            nf=min(top.ss, cap[top.ff][i]);
+        for(auto i:adj[top.first]){
+            nf=min(top.second, cap[top.first][i]);
             if(!nf || par[i]!=-1) continue;
-            par[i]=top.ff;
+            par[i]=top.first;
             if(i==t) return nf;
-            q.push(mp(i,nf));
+            q.push({i, nf});
         }
     }
     return 0;
@@ -32,7 +36,7 @@ int bfs(int s, int t)
 int maxflow(int s, int t)
 {
     int ans=0, flow, cur;
-    while(flow=bfs(s, t)){
+    while((flow=bfs(s, t))){
         ans+=flow;
         cur=t;
         while(cur!=s){
@@ -43,3 +47,5 @@ int maxflow(int s, int t)
     }
     return ans;
 }
+
+// par.resize(nodes+1);
