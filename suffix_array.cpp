@@ -49,7 +49,7 @@ struct suffix_array{
 
 	void build_suffix_array()
 	{
-		if(C <= 256) str.pb('$');
+		if(C <= 256) str.pb('#');
 		else str.pb(-1);
 
 		++n;		
@@ -63,8 +63,7 @@ struct suffix_array{
 			for(int i = 0; i < n; ++i)
 				p[--cnt[str[i]]] = i;
 		} else{
-			for(int i = 0; i < n; ++i)
-				p[i] = i;
+			iota(p.begin(), p.end(), 0);
 			sort(all(p), [&](int a, int b){
 				return str[a] < str[b];
 			});
@@ -78,7 +77,7 @@ struct suffix_array{
 
 		vi pn(n), cn(n);
 
-		for(int len = 1; len < n; len <<= 1){
+		for(int len = 1; len < n && classes < n; len <<= 1){
 			for(int i = 0; i < n; ++i)
 				pn[i] = p[i] >= len ? p[i] - len : p[i] - len + n;
 			
@@ -135,14 +134,15 @@ struct suffix_array{
 	{
 		str = _str, C = _C, n = _str.size();
 		build_suffix_array();
-		if(need_rmq && n > 1) build_lcp(), rmq.build(lcp);
+		if(need_rmq && n > 1) 
+			build_lcp(), rmq.build(lcp);
 	}
 
 	// 0 indexing
 	int get_lcp(int a, int b)
 	{
-		a = rank[a], b = rank[b];
 		if(a == b) return n - a;
+		a = rank[a], b = rank[b];
 		if(a > b) swap(a, b);
 		return rmq.query_value(a, b - 1);
 	}
