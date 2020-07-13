@@ -1,37 +1,42 @@
-#define base ll
+#define poly vector<ll>
 
-vector<base> FWHT(vector<base> P, bool inverse) {
+void FWHT(poly &P, bool inverse) {
     int n=P.size();
     for (int len = 1; 2 * len <= n; len <<= 1) {
         for (int i = 0; i < n; i += 2 * len) {
             for (int j = 0; j < len; j++) {
                 ll u = P[i + j];
                 ll v = P[i + len + j];
-                P[i + j] = u + v;
-                P[i + len + j] = u - v;
+                if (!inverse) {
+                    P[i + j] = u + v;
+                    P[i + len + j] = u - v;
+                } else {
+                    P[i + j] = u + v;
+                    P[i + len + j] = u - v;
+                }                
             }
         }
     }
-    
+
+    // required only for xor
     if (inverse) {
         for (int i = 0; i < n; i++){
-            //if(P[i]%n) cout<<"danger!";
+            assert(P[i]%n==0);
             P[i] = P[i]/n;
         }
     }
-
-    return P;
 }
 
-vector<base> multiply(vector<base> &v1, vector<base> &v2)
+// n should be a power of 2
+poly multiply(poly p1, poly p2)
 {
-    int n=v1.size();
-    vector<base> p1=FWHT(v1, 0), p2=FWHT(v2, 0);
-    vector<base> res(n);
-    fr(i, n){
+    int n=p1.size();
+    FWHT(p1, 0), FWHT(p2, 0);
+    poly res(n);
+    for(int i=0; i<n; ++i){
         res[i]=p1[i]*p2[i];
     }
-    res=FWHT(res, 1);
+    FWHT(res, 1);
     return res;
 }
 
