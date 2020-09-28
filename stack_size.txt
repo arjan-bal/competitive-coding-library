@@ -1,3 +1,8 @@
+Windows:
+https://stackoverflow.com/questions/54821412/how-to-increase-stack-size-when-compiling-a-c-program-using-mingw-compiler
+g++ -Wl,--stack,16777216 -o file.exe file.cpp
+Sets stack size to 16777216 bytes
+
 On Linux, to get an unlimited stack, you should open a shell and run this command:
 $ ulimit -s unlimited
 And then (until you close that shell) the stack limit for that shell (and for the commands you will call from inside that shell, like ./program < input.txt and so on) will be unlimited.
