@@ -9,10 +9,10 @@ inline void build(int st, int en, int node)
 		tree[node]=vec[st];
 		return ;
 	}
-	int mid=(st+en)>>1;
-	build(st, mid, (node<<1));
-	build(mid+1, en, (node<<1)|1);
-	tree[node]=unite(tree[node<<1], tree[(node<<1)|1]);
+	int mid=(st+en)>>1, cl=(node<<1), cr=(cl|1);
+	build(st, mid, cl);
+	build(mid+1, en, cr);
+	tree[node]=unite(tree[cl], tree[cr]);
 }
 
 inline void update(int st, int en, int node, int idx, int nv)
@@ -22,18 +22,18 @@ inline void update(int st, int en, int node, int idx, int nv)
 		tree[node]+=nv;
 		return ;
 	}
-	int mid=(st+en)>>1;
-	update(st, mid, node<<1, idx, nv);
-	update(mid+1, en, (node<<1)|1, idx, nv);
-	tree[node]=unite(tree[node<<1], tree[(node<<1)|1]);
+	int mid=(st+en)>>1, cl=(node<<1), cr=(cl|1);
+	update(st, mid, cl, idx, nv);
+	update(mid+1, en, cr, idx, nv);
+	tree[node]=unite(tree[cl], tree[cr]);
 }
 
 inline int query(int st, int en, int node, int l, int r)
 {
 	if(st>r || en<l) return 0;
 	if(st>=l && en<=r) return tree[node];
-	int mid=(st+en)>>1;
-	return query(st, mid, node<<1, l, r)+query(mid+1, en, (node<<1)|1, l, r);
+	int mid=(st+en)>>1, cl=(node<<1), cr=(cl|1);
+	return query(st, mid, cl, l, r)+query(mid+1, en, cr, l, r);
 }
 
 //lazy propogation
@@ -42,8 +42,9 @@ inline void push(int st, int en, int node)
 {
 	tree[node]+=lazy[node];
 	if(st!=en){
-		lazy[node<<1]+=lazy[node];
-		lazy[(node<<1)|1]+=lazy[node];
+		int cl=(node<<1), cr=(cl|1)
+		lazy[cl]+=lazy[node];
+		lazy[cr]+=lazy[node];
 	}
 	lazy[node]=0;
 }
@@ -57,10 +58,10 @@ inline void update(int st, int en, int node, int l, int r, int nv)
 		push(st, en, node);
 		return ;
 	}
-	int mid=(st+en)>>1;
-	update(st, mid, node<<1, l, r, nv);
-	update(mid+1, en, (node<<1)|1, l, r, nv);
-	tree[node]=unite(tree[node<<1], tree[(node<<1)|1]);
+	int mid=(st+en)>>1, cl=(node<<1), cr=(cl|1);
+	update(st, mid, cl, l, r, nv);
+	update(mid+1, en, cr, l, r, nv);
+	tree[node]=unite(tree[cl], tree[cr]);
 }
 
 inline int query(int st, int en, int node, int l, int r)
@@ -68,6 +69,6 @@ inline int query(int st, int en, int node, int l, int r)
 	if(lazy[node]) push(st, en, node);
 	if(st>r || en<l) return 0;
 	if(st>=l && en<=r) return tree[node];
-	int mid=(st+en)>>1;
-	return query(st, mid, node<<1, l, r)+query(mid+1, en, (node<<1)|1, l, r);
+	int mid=(st+en)>>1, cl=(node<<1), cr=(cl|1);
+	return query(st, mid, cl, l, r)+query(mid+1, en, cr, l, r);
 }

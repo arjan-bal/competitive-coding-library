@@ -7,11 +7,11 @@ umap<int, bool> seen;
 
 void init()
 {
-    a.resize(n, -1);
-    b.resize(m+1, -1);
+    a.assign(n, -1);
+    b.assign(m+1, -1);
 }
 
-bool match(int idx)N
+bool match(int idx)
 {
     for(auto i:adj[idx]){
         if(seen[i] || i==a[idx]) continue;
