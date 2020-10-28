@@ -49,7 +49,7 @@ struct suffix_array{
 
 	void build_suffix_array()
 	{
-		if(C <= 256) str.pb('#');
+		if(C <= 256) str.pb(0);
 		else str.pb(-1);
 
 		++n;		
