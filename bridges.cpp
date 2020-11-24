@@ -1,22 +1,34 @@
+/*
+	N: Number of Vertices
+	M: Number of Edges
+	adj should contain neighbours of the form: {Vertex no., Edge no.}
+	After running dfs(1), isBridge[i] will be one if Edge number 'i' is a bridge
+	NOTE:
+	always ctr>=1 since disc relies on it being 0 only for undiscovered vertices
+*/
+
 int disc[N], low[N], parent[N];
-bool isbrg[M];
-vpii adj[N];
+bool isBridge[M];
+vector<pair<int, int>> adj[N];
 
 void dfs(int cur)
 {
-	disc[cur]=low[cur]=ctr++;
-	for(auto i:adj[cur]){
-		if(i.ff==parent[cur]) continue;
-		if(disc[i.ff]){
-			low[cur]=min(low[cur], disc[i.ff]);
+	disc[cur] = low[cur] = ctr++;
+	
+	for(auto i : adj[cur]) {
+		if (i.first == parent[cur]) 
+			continue;
+		if (disc[i.first]) {
+			low[cur] = min(low[cur], disc[i.first]);
 			continue;
 		}
-		parent[i.ff]=cur;
-		dfs(i.ff);
-		if(low[i.ff]<=low[cur]) low[cur]=low[i.ff];
-		else if(low[i.ff]>disc[cur]) isbrg[i.ss]=1;
+		parent[i.first] = cur;
+		dfs(i.first);
+		if (low[i.first] <= low[cur]) {
+			low[cur] = low[i.first];
+		} else if(low[i.first] > disc[cur]) {
+			isBridge[i.second]=1;
+		}
 	}
 }
-
-//take ctr>=1
  

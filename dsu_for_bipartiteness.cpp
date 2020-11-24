@@ -31,7 +31,7 @@ struct DSU{
 		pii res1 = root(a), res2 = root(b);
 		int x1 = res1.ff, x2 = res2.ff;
 		bool ca = res1.ss, cb = res2.ss;
-		if(x1==x2) {
+		if(x1 == x2) {
 			if (ca == cb) {
 				bipartite = false;
 			}

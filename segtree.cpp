@@ -3,7 +3,7 @@ struct Segtree {
 	int L, R;
 	vector<base> tree;
 
-	inline int unite(int n1, int n2)
+	inline base unite(base n1, base n2)
 	{
 		return n1 + n2;
 	}
@@ -49,14 +49,15 @@ struct Segtree {
 
 	inline base query(int st, int en, int node, int l, int r)
 	{
-		if (st > r || en < l) 
-			return 0;
-		
 		if (st >= l && en <= r) 
 			return tree[node];
 		
 		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);
 		
+		if (r <= mid)
+			return query(st, mid, cl, l, r);
+		if (l > mid)
+			return query(mid + 1, en, cr, l, r);
 		return query(st, mid, cl, l, r) + query(mid + 1, en, cr, l, r);
 	}
 
@@ -73,6 +74,11 @@ struct Segtree {
 		dfs(mid + 1, en, cr);
 	}
 	
+	void show()
+	{
+		dfs(L, R, 1);
+	}
+
 	base query(int l, int r)
 	{
 		return query(L, R, 1, l, r);
@@ -82,11 +88,6 @@ struct Segtree {
 	{
 		update(L, R, 1, idx, nv);
 	}
-
-	void show()
-	{
-		dfs(L, R, 1);
-	}
 };
 
 
@@ -94,14 +95,44 @@ struct Segtree {
 //lazy propogation
 
 struct Segtree {
-	// copy rest from normal Segtree
+	typedef int base;
+	int L, R;
+	vector<base> tree;
+	vector<int> lazy;
+
+	inline base unite(base n1, base n2)
+	{
+		return n1 + n2;
+	}
+
+	inline void build(int st, int en, int node)
+	{
+		if (st == en) {
+			tree[node] = vec[st];
+			return ;
+		}
+		
+		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);
+		
+		build(st, mid, cl);
+		build(mid + 1, en, cr);
+		
+		tree[node] = unite(tree[cl], tree[cr]);
+	}
+
+	Segtree(int l, int r) : L(l), R(r)
+	{
+		tree.resize((R - L  +  1)  <<  2, 0);
+		lazy.resize((R - L  +  1)  <<  2, 0);
+		build(L, R, 1);
+	}
 
 	inline void push(int st, int en, int node)
 	{
-		tree[node] += lazy[node];
+		tree[node] += (en - st + 1) * lazy[node];
 		
 		if (st != en) {
-			int cl = (node << 1), cr = (cl | 1)
+			int cl = (node << 1), cr = (cl | 1);
 			lazy[cl] += lazy[node];
 			lazy[cr] += lazy[node];
 		}
@@ -166,5 +197,10 @@ struct Segtree {
 	void update(int l, int r, base nv)
 	{
 		update(L, R, 1, l, r, nv);
+	}
+
+	base query(int l, int r)
+	{
+		return query(L, R, 1, l, r);
 	}
 };
