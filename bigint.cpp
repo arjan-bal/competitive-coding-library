@@ -1,6 +1,11 @@
+/*
+	Has overloaded << and >> operators too
+*/
+
 const int base = 1000000000;
 const int base_digits = 9;
- 
+typedef vector<long long> vll;
+
 struct bigint {
     vector<int> a;
     int sign;
@@ -279,8 +284,6 @@ struct bigint {
         return res;
     }
  
-    typedef vector<long long> vll;
- 
     static vll karatsubaMultiply(const vll &a, const vll &b) {
         int n = a.size();
         vll res(n + n);
@@ -344,30 +347,21 @@ struct bigint {
         return res;
     }
 };
-int main()
-{
-    bigint a,b,c;
-    cin>>a;
-    cin>>b;
-    cin>>c;
-    cout<<a*b<<endl;
-    cout<<a+c<<endl;
-} 
 
 bigint sqrt(bigint x)
 {
-	bigint st=0, en=1, mid, mid1;
-	while(en*en<x){
-		st=en;
-		en+=en;
+	bigint st = 0, en = 1;
+
+	while (en * en < x){
+		st = en;
+		en += en;
 	}
-	while(st<=en){
-		mid=(st+en)/2;
-		mid1=mid+1;
-		if(mid*mid<=x){
-			if(mid1*mid1>x) return mid;
-			st=mid1;
-		}
-		else en=mid-1;
+
+	while(st < en) {
+		bigint mid = (st + en + 1) >> 1;
+		if (mid * mid > x)
+			en = mid - 1;
+		else 
+			st = mid;
 	}
 }
