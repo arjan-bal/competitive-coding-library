@@ -6,8 +6,8 @@ namespace geometry{
 
 	const double pi=2.*acos(0);
 
-	double radian(double dgre){ return (pi*dgre)/180;}
-	double degree(double rad){ return (180*rad)/pi;}
+	double toRadian(double dgre){ return (pi*dgre)/180;}
+	double toDegree(double rad){ return (180*rad)/pi;}
 	base dist2(pt p){ return p.x*p.x + p.y*p.y;}
 	double dist(pt p){ return sqrtl(dist2(p));}
 	pt operator-(pt p1, pt p2){return {p1.x-p2.x, p1.y-p2.y};}
@@ -41,9 +41,9 @@ namespace geometry{
 		return isColinear(a, b, c) && isColinear(b, c, d);
 	}
 
-	bool isLeft(pt p1, pt p2, pt p3)
+	bool isLeft(pt front, pt back, pt p)
 	{ 
-		return cross(p1-p2, p3-p2)<0;
+		return cross(front-back, p-back)>0;
 	}
 
 	bool oppositeSides(pt a, pt b, pt c, pt d)
@@ -104,8 +104,9 @@ bool inTriangle(pt a, pt b, pt c, pt d)
 
 bool isConvex(vector<pt> &vertices)
 {
+	int n = vertices.size();
 	bool first=isLeft(vertices[0], vertices[1], vertices[3]);
-	for(int i=1; i<vertices.size(); ++i)
+	for(size_t i=1; i<vertices.size(); ++i)
 		if(isLeft(vertices[i], vertices[(i+1)%n], vertices[(i+2)%n]) != first) return 0;
 	return 1;
 }

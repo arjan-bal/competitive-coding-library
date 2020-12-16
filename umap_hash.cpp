@@ -38,4 +38,4 @@ struct custom_hash {
     }
 };
 
-unordered_map<long long, int, custom_hash> safe_map;
+typedef unordered_map<long long, int, custom_hash> safe_map;

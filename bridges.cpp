@@ -32,3 +32,39 @@ void dfs(int cur)
 	}
 }
  
+vector<int> component;
+vector<vector<int>> nadj; 
+
+void dfs1(int cur)
+{
+	component[cur] = ctr;
+	for (auto i : adj[cur]) {
+		if (isBridge[i.second] || component[i.first])
+			continue;
+		dfs1(i.first);
+	}
+}
+
+void makeBridgeTree(int n)
+{
+	ctr = 0;
+	component.assign(n + 1, 0);
+	for (int i = 1; i <= n; ++i) {
+		if (component[i])
+			continue;
+		++ctr;
+		dfs1(i);
+	}
+	
+	nadj.assign(ctr + 1, vector<int>());
+
+	for (int i = 1; i <= n; ++i) {
+		int &ci = component[i];
+		for (auto j : adj[i]) {
+			int &cj = component[j.first];
+			if (ci == cj)
+				continue;
+			nadj[ci].push_back(cj);
+		}
+	}
+}
