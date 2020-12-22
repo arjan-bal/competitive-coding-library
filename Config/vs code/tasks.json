@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "build and run",
+            "command": "ulimit -s unlimited && make run PROBLEM_NAME=${fileBasenameNoExtension} DEBUG=false",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/kitchen"
+                
+            },
+        },
+        {
+            "type": "shell",
+            "label": "debug",
+            "command": "make clean run PROBLEM_NAME=${fileBasenameNoExtension} DEBUG=true",
+            "options": {
+                "cwd": "${workspaceFolder}/kitchen"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+    ]
+}
