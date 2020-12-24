@@ -2,7 +2,6 @@
 // assumes nodes numbered from [1, n], can change lims for [0, n] in for loop
 vector<int> findTopSort(int n, vector<int> *adj)
 {
-    trace(n);
     vector<bool> inProcess(n + 1, 0), seen(n + 1, 0);
     vector<int> topo;
     bool cycleFound = 0;
