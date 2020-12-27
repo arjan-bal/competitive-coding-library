@@ -358,7 +358,7 @@ bigint sqrt(bigint x)
 	}
 
 	while(st < en) {
-		bigint mid = (st + en + 1) >> 1;
+		bigint mid = (st + en + 1) / 2;
 		if (mid * mid > x)
 			en = mid - 1;
 		else 

@@ -29,7 +29,7 @@ struct Segtree {
 		build(L, R, 1);
 	}
 
-	inline void update(int st, int en, int node, int idx, int nv)
+	inline void update(int st, int en, int node, int idx, base nv)
 	{
 		if (st > idx || en < idx) 
 			return ;

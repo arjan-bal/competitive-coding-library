@@ -1,3 +1,8 @@
+/*
+    Expects vertices to be numbered [1, n]
+    Expects adj list of correct size to be present globally
+*/
+
 const int level = 18;
 
 int par[level][N] = {};
@@ -23,9 +28,7 @@ void precom(int n)
         int cur = q.front();
         q.pop();
         for (auto i : adj[cur]) {
-            if (i == par[0][cur]) {
-                continue;
-            }
+            if (i == par[0][cur]) continue;
             populate(i, cur);
             q.push(i);
         }
