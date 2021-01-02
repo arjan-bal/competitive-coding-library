@@ -1,5 +1,6 @@
 struct Segtree {
 	typedef int base;
+    typedef int qbase;
 	int L, R;
 	vector<base> tree;
 
@@ -31,8 +32,7 @@ struct Segtree {
 
 	inline void update(int st, int en, int node, int idx, base nv)
 	{
-		if (st > idx || en < idx) 
-			return ;
+		if (st > idx || en < idx) return ;
 		
 		if (st == en) {
 			tree[node] += nv;
@@ -47,17 +47,14 @@ struct Segtree {
 		tree[node] = unite(tree[cl], tree[cr]);
 	}
 
-	inline base query(int st, int en, int node, int l, int r)
+	inline qbase query(int st, int en, int node, int l, int r)
 	{
-		if (st >= l && en <= r) 
-			return tree[node];
+		if (st >= l && en <= r) return tree[node];
 		
 		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);
 		
-		if (r <= mid)
-			return query(st, mid, cl, l, r);
-		if (l > mid)
-			return query(mid + 1, en, cr, l, r);
+		if (r <= mid) return query(st, mid, cl, l, r);
+		if (l > mid) return query(mid + 1, en, cr, l, r);
 		return query(st, mid, cl, l, r) + query(mid + 1, en, cr, l, r);
 	}
 
@@ -96,6 +93,7 @@ struct Segtree {
 
 struct Segtree {
 	typedef int base;
+    typedef int qbase;
 	int L, R;
 	vector<base> tree;
 	vector<int> lazy;
@@ -112,11 +110,9 @@ struct Segtree {
 			return ;
 		}
 		
-		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);
-		
+		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);		
 		build(st, mid, cl);
-		build(mid + 1, en, cr);
-		
+		build(mid + 1, en, cr);		
 		tree[node] = unite(tree[cl], tree[cr]);
 	}
 
@@ -129,24 +125,19 @@ struct Segtree {
 
 	inline void push(int st, int en, int node)
 	{
-		tree[node] += (en - st + 1) * lazy[node];
-		
+		tree[node] += (en - st + 1) * lazy[node];		
 		if (st != en) {
 			int cl = (node << 1), cr = (cl | 1);
 			lazy[cl] += lazy[node];
 			lazy[cr] += lazy[node];
-		}
-		
+		}		
 		lazy[node] = 0;
 	}
 
-	inline void update(int st, int en, int node, int l, int r, int nv)
+	inline void update(int st, int en, int node, int l, int r, base nv)
 	{
-		if (lazy[node]) 
-			push(st, en, node);
-		
-		if (st>r || en<l) 
-			return ;
+		if (lazy[node]) push(st, en, node);		
+		if (st>r || en<l) return ;
 		
 		if (st >= l && en <= r) {
 			lazy[node] = nv;
@@ -157,32 +148,22 @@ struct Segtree {
 		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);
 		
 		update(st, mid, cl, l, r, nv);
-		update(mid + 1, en, cr, l, r, nv);
-		
+		update(mid + 1, en, cr, l, r, nv);		
 		tree[node] = unite(tree[cl], tree[cr]);
 	}
 
-	inline base query(int st, int en, int node, int l, int r)
+	inline qbase query(int st, int en, int node, int l, int r)
 	{
-		if (lazy[node]) 
-			push(st, en, node);
-		
-		if (st > r || en < l) 
-			return 0;
-		
-		if (st >= l && en <= r) 
-			return tree[node];
-		
-		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);
-		
+		if (lazy[node]) push(st, en, node);
+		if (st > r || en < l) return 0;		
+		if (st >= l && en <= r) return tree[node];		
+		int mid = (st + en) >> 1, cl = (node << 1), cr = (cl | 1);		
 		return query(st, mid, cl, l, r) + query(mid + 1, en, cr, l, r);
 	}
 
 	void dfs(int st, int en, int node)
 	{
-		if (lazy[st]) 
-			push(st, en, node);
-		
+		if (lazy[st]) push(st, en, node);		
 		if (st == en) {
 			trace(st, tree[node]);
 			return ;
