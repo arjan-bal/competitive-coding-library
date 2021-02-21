@@ -10,6 +10,7 @@ vector<int> depth;
 
 void precom(int n)
 {
+	assert((1 << level) >= n);
     depth.assign(n + 1, 0);
     depth[1] = 0;
     queue<int> q;
