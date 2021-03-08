@@ -1,6 +1,6 @@
 /*
 	Finds Euler Path / Cycle in O(M + N)
-	Remember to call clear before finding answer
+	Remember to call reset before finding answer
 	Path will be present in ans
 	ans will contain the edge ids of the path
  */
