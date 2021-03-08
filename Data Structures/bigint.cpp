@@ -4,7 +4,7 @@
 
 const int base = 1000000000;
 const int base_digits = 9;
-typedef vector<long long> vll;
+// typedef vector<long long> vll;
 
 struct bigint {
     vector<int> a;
