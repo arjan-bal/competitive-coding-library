@@ -163,7 +163,7 @@ struct Segtree {
 
 	void dfs(int st, int en, int node)
 	{
-		if (lazy[st]) push(st, en, node);		
+		if (lazy[node]) push(st, en, node);		
 		if (st == en) {
 			trace(st, tree[node]);
 			return ;
@@ -180,8 +180,13 @@ struct Segtree {
 		update(L, R, 1, l, r, nv);
 	}
 
-	base query(int l, int r)
+	qbase query(int l, int r)
 	{
 		return query(L, R, 1, l, r);
+	}
+
+	void show()
+	{
+		dfs(L, R, 1);
 	}
 };
