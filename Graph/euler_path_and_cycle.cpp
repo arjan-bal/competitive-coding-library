@@ -29,6 +29,8 @@ int getOther(int id, int v)
 // for cycle check that oddCount in checkEuler is 0
 void dfs(int v) 
 {
+	// need to keep pos array since we might
+	// visit v again, wouldn't want to start over
 	while(pos[v] < (int)adj[v].size()) {
 		int id = adj[v][pos[v]];
 		pos[v]++;
