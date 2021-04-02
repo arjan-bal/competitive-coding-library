@@ -1,17 +1,19 @@
-typedef vector<vector<ll>> matrix; 
+typedef vector<vector<modint>> matrix; 
 
-void reshape(matrix &mat, int n, int m)
+template<typename T>
+void reshape(vector<vector<T>> &mat, int n, int m)
 {
 	mat.resize(n);
 	for(auto &i:mat) i.resize(m);
 }
 
-matrix operator*(matrix &mat1, matrix &mat2)
+template<typename T>
+vector<vector<T>> operator*(vector<vector<T>> &mat1, vector<vector<T>> &mat2)
 {
 	int n1=mat1.size(), m1=mat1[0].size(), n2=mat2.size(), m2=mat2[0].size();
 	assert(m1==n2);
-	ll sum;
-	matrix ret;
+	T sum;
+	vector<vector<T>> ret;
 	reshape(ret, n1, m2);
 
 	for(int i=0; i<n1; ++i)
@@ -23,9 +25,10 @@ matrix operator*(matrix &mat1, matrix &mat2)
 	return ret;
 }
 
-matrix power(matrix res, ll ex)
+template<typename T>
+vector<vector<T>> power(vector<vector<T>> res, ll ex)
 {
-	matrix tmp=res;
+	auto tmp=res;
 	--ex;
 	while(ex>0){
 		if(ex&1) res=res*tmp;
