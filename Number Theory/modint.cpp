@@ -1,6 +1,6 @@
 // attributaion: cp-algorithms.com
 template<typename T>
-T bpow(T x, size_t n) {
+T bpow(T x, int64_t n) {
 	return n ? n % 2 ? x * bpow(x, n - 1) : bpow(x * x, n / 2) : T(1);
 }
 
