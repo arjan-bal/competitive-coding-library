@@ -19,7 +19,7 @@ vector<vector<T>> operator*(vector<vector<T>> &mat1, vector<vector<T>> &mat2)
 	for(int i=0; i<n1; ++i)
 	    for(int j=0; j<m2; ++j){	
 	    	sum=0;
-	        for(int l=0; l<m1; ++l) sum=(sum+mat1[i][l]*mat2[l][j])%mod;
+	        for(int l=0; l<m1; ++l) sum=(sum+mat1[i][l]*mat2[l][j]);
 	        ret[i][j]=sum;
 	    }
 	return ret;
