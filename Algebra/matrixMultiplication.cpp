@@ -3,8 +3,7 @@ typedef vector<vector<modint>> matrix;
 template<typename T>
 void reshape(vector<vector<T>> &mat, int n, int m)
 {
-	mat.assign(n);
-	for(auto &i:mat) i.assign(m, 0);
+	mat.assign(n, vector<T>(m, T(0)));
 }
 
 template<typename T>
