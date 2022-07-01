@@ -76,12 +76,9 @@ struct Segtree {
 		dfs(L, R, 1);
 	}
 
-	base query(int l, int r)
-	{
-		return query(L, R, 1, l, r);
-	}
+        qbase query(int l, int r) { return query(L, R, 1, l, r); }
 
-	void update(int idx, base nv)
+        void update(int idx, base nv)
 	{
 		update(L, R, 1, idx, nv);
 	}
