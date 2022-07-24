@@ -1,22 +1,24 @@
 #[derive(Clone, Debug)]
 struct Node {
-    value: Vec<usize>,
+    value: i32,
 }
 
 impl Node {
     fn merge(&self, other: &Node) -> Node {
         Node {
-            value: merge_sorted(&self.value, &other.value),
+            value: // logic to merge nodes
         }
     }
 }
 
 #[derive(Debug)]
-struct Res(usize);
+struct Res(i32);
 
 impl Res {
     fn merge(&self, other: &Res) -> Res {
-        return Res(self.0 + other.0);
+        Res(
+            // logic to merge results
+        )
     }
 }
 
@@ -31,35 +33,56 @@ struct SegTreeBuildCtx<'a> {
 }
 
 impl SegTree {
-    fn query(&self, l: i32, r: i32, val: i32) -> Res {
-        self.query_range(self.start, self.end, 1, l, r, val)
+    fn query(&self, l: i32, r: i32) -> Res {
+        self.query_range(self.start, self.end, 1, l, r)
     }
 
-    fn query_range(&self, st: i32, en: i32, node: usize, l: i32, r: i32, val: i32) -> Res {
+    fn update(&mut self, idx: i32, val: Node) {
+        self.update_range(self.start, self.end, 1, val, idx);
+    }
+
+    fn query_range(&self, st: i32, en: i32, node: usize, l: i32, r: i32) -> Res {
         if st >= l && en <= r {
-            return Res(self.tree[node]
-                .value
-                .partition_point(|x| *x as i32 <= val));
+            return Res(self.tree[node].value);
         }
         let mid = (st + en) >> 1;
         let node_l = node << 1;
         let node_r = (node << 1) | 1;
         if r <= mid {
-            return self.query_range(st, mid, node_l, l, r, val);
+            return self.query_range(st, mid, node_l, l, r);
         }
         if l > mid {
-            return self.query_range(mid + 1, en, node_r, l, r, val);
+            return self.query_range(mid + 1, en, node_r, l, r);
         }
         Res::merge(
-            &self.query_range(st, mid, node_l, l, r, val),
-            &self.query_range(mid + 1, en, node_r, l, r, val),
+            &self.query_range(st, mid, node_l, l, r),
+            &self.query_range(mid + 1, en, node_r, l, r),
         )
+    }
+
+    fn update_range(&mut self, st: i32, en: i32, node: usize, val: Node, idx: i32) {
+        if en < idx || st > idx {
+            return ;
+        }
+        if st == en {
+            self.tree[node] = val;
+            return ;
+        }
+        let mid = (st + en) >> 1;
+        let node_l = node << 1;
+        let node_r = (node << 1) | 1;
+        if idx <= mid {
+            self.update_range(st, mid, node_l, val, idx);
+        } else {
+            self.update_range(mid + 1, en, node_r, val, idx);
+        }
+        self.tree[node] = self.tree[node_l].merge(&self.tree[node_r]);
     }
 
     fn build_range(&mut self, st: i32, en: i32, node: usize, ctx: &SegTreeBuildCtx) {
         if st == en {
             self.tree[node] = Node {
-                value: vec![ctx.vals[st as usize]],
+                value: 0,
             };
             return;
         }
@@ -74,14 +97,14 @@ impl SegTree {
     fn new(start: i32, end: i32, ctx: &SegTreeBuildCtx) -> SegTree {
         let len = 4 * (end - start + 1) as usize;
         let default_node = Node {
-            value: Vec::with_capacity(0),
+            value: 0,
         };
         let mut st = SegTree {
             tree: vec![default_node; 4 * len],
             start: start,
             end: end,
         };
-        st.build_range(start, end, 1, ctx);
+        // st.build_range(start, end, 1, ctx);
         st
     }
 }
