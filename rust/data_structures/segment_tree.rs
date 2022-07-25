@@ -101,8 +101,8 @@ impl SegTree {
         };
         let mut st = SegTree {
             tree: vec![default_node; 4 * len],
-            start: start,
-            end: end,
+            start,
+            end,
         };
         // st.build_range(start, end, 1, ctx);
         st
