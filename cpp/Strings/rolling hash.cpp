@@ -9,9 +9,9 @@ ll modInverse(ll a, ll m)
 { return power(a, m-2, m); }
 
 /*
-	creates rolling hash on vector with elements in [1, 28]
-	Query hash of segment [l, r]
-	To check if pallandrome, compare query(l, r)==compare(l, r, 1)
+        creates rolling hash on vector with elements in [1, 28]
+        Query hash of segment [l, r]
+        To check if palindrome, compare query(l, r)==query(l, r, 1)
 */
 
 struct rollingHash{

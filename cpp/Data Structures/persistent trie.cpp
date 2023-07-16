@@ -38,23 +38,23 @@ typedef vector<double> vd;
 
 int n, q, num, tkn=0;
 
-struct node{
-    int f;
-    node* child[2]={};
-    node():f(0){}
+struct Node {
+  int f;
+  Node* child[2] = {};
+  Node() : f(0) {}
 };
 
-vector<node*> roots;
+vector<Node*> roots;
 
 void init()
 {
     roots.resize(n+1);
-    roots[0]=new node;
+    roots[0] = new Node;
 }
 
 int cans;
 
-typedef node* pnode;
+typedef Node* pnode;
 
 int tf(pnode cur)
 {
@@ -69,7 +69,7 @@ void insert(pnode &naya, pnode purana, int lvl)
         return ;
     }
     if((1<<lvl)&num){
-        naya->child[1]=new node;
+        naya->child[1] = new Node;
         naya->child[0]=(purana?purana->child[0]:NULL);
 
         if(purana) purana=purana->child[1];
@@ -77,7 +77,7 @@ void insert(pnode &naya, pnode purana, int lvl)
         naya->f=tf(naya->child[0])+tf(naya->child[1]);
         return ;
     }
-    naya->child[0]=new node;
+    naya->child[0] = new Node;
     naya->child[1]=(purana?purana->child[1]:NULL);
 
     if(purana) purana=purana->child[0];
@@ -136,7 +136,7 @@ int main()
         int x;
         fr1(i, n){
             cin>>num;
-            roots[i]=new node;
+            roots[i] = new Node;
             insert(roots[i], roots[i-1], 14);
         }
         
